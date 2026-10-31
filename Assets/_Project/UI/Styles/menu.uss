@@ -1,0 +1,57 @@
+.root {
+    flex-grow: 1;
+    background-color: var(--color-bg);
+    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/Lacquer/Lacquer-Regular.ttf?fileID=12800000&guid=150021e55bb757e449b1a6db9363764e&type=3#Lacquer-Regular");
+}
+
+.screen {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    width: 175px;
+    height: 221px;
+    -unity-background-scale-mode: scale-to-fit;
+}
+
+.menu-list {
+    align-items: center;
+}
+
+.menu-btn {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    margin: 0 0 var(--gap-menu) 0;
+    padding: 0;
+    color: var(--color-fg);
+    font-size: var(--size-button);
+    letter-spacing: 2px;
+    transition-property: color, scale;
+    transition-duration: var(--time-hover);
+}
+
+.menu-btn:hover,
+.menu-btn:focus {
+    color: rgb(255, 61, 120);
+    scale: 1.07;
+}
+
+.menu-btn--a {
+    rotate: -1.5deg;
+}
+
+.menu-btn--b {
+    rotate: 1deg;
+}
+
+.menu-btn:hover,
+.menu-btn:focus {
+    color: var(--color-hover);
+    scale: 1.07 1.07;
+}
