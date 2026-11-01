@@ -1,0 +1,47 @@
+.vhs-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.vhs-scanlines {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    -unity-background-scale-mode: stretch-to-fill;
+}
+
+.vhs-roll {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 14%;
+    display: none;
+}
+
+.osd {
+    position: absolute;
+    top: var(--margin-osd-top, 24px);
+    margin: 0;
+    padding: 0;
+    color: var(--color-osd, rgb(241, 230, 232));
+    font-size: var(--size-osd, 27px);
+    opacity: var(--opacity-osd, 0.85);
+    white-space: nowrap;
+    text-shadow: 2px 0 0 rgba(255, 0, 60, 0.6);
+}
+
+.osd--left {
+    left: var(--margin-osd-x, 32px);
+}
+
+.osd--right {
+    right: var(--margin-osd-x, 32px);
+}

@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
     <ui:VisualElement name="root" class="root">
         <ui:VisualElement name="screen-menu" class="screen">
-            <ui:Image name="logo" data-source-type="Mono.Cecil.PE.ImageWriter+&lt;&gt;c, Mono.Cecil" class="logo" style="background-image: url(&quot;project://database/Assets/_Project/Art/YTPLogo.png?fileID=2800000&amp;guid=6d7636b3e251efb4eb4bd603293a8c3b&amp;type=3#YTPLogo&quot;); -unity-slice-type: sliced; width: 175px; height: 221px; -unity-background-scale-mode: stretch-to-fill; background-repeat: no-repeat no-repeat; background-color: rgba(0, 0, 0, 0); -unity-text-auto-size: none;"/>
+            <ui:Image name="logo" data-source-type="Mono.Cecil.PE.ImageWriter+&lt;&gt;c, Mono.Cecil" class="logo" style="background-image: url(&quot;project://database/Assets/_Project/Art/YTPLogo.png?fileID=2800000&amp;guid=6d7636b3e251efb4eb4bd603293a8c3b&amp;type=3#YTPLogo&quot;); -unity-slice-type: sliced; -unity-background-scale-mode: stretch-to-fill; background-repeat: no-repeat no-repeat; background-color: rgba(0, 0, 0, 0); -unity-text-auto-size: none; max-height: 44%; height: 380px; width: 300px;"/>
             <ui:VisualElement class="menu-list">
                 <ui:Button name="btn-host" text="HOST GAME" class="menu-btn menu-btn--a"/>
                 <ui:Button name="btn-join" text="JOIN LOBBY" class="menu-btn menu-btn--b"/>

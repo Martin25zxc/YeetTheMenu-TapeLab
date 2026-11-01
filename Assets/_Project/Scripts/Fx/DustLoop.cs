@@ -22,6 +22,9 @@ public class DustLoop : MonoBehaviour
 
     [SerializeField] private float swayFrequency = 0.35f;
 
+    [Header("Reloj retro")]
+    [SerializeField] private RetroClock clock;
+
     private ParticleSystem ps;
     private ParticleSystem.Particle[] particles;
 
@@ -110,7 +113,8 @@ public class DustLoop : MonoBehaviour
 
     private void LateUpdate()
     {
-        float dt = Time.unscaledDeltaTime;
+        float dt = clock != null ? clock.ScaledDelta : Time.unscaledDeltaTime;
+        if (dt <= 0f) return;      // congelado: no hay nada que mover
         elapsed += dt;
 
         float halfHeight = targetCamera.orthographicSize;

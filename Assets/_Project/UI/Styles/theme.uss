@@ -3,8 +3,16 @@
     --color-fg: rgb(232, 217, 220);
     --color-accent: rgb(199, 10, 63);
     --color-hover: rgb(255, 61, 120);
-    --size-button: 34px;
-    --gap-menu: 22px;
+    --size-button: 60px;
+    --gap-menu: 30px;
     --time-hover: 0.4s;
     -unity-font-definition: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=fa0847300a7a0f44ebd3724b67ea2b17&type=3#NotInter-Regular");
+
+        /* OSD */
+    --color-osd:      rgb(241, 230, 232);
+    --size-osd:       27px;
+    --margin-osd-x:   32px;
+    --margin-osd-top: 24px;
+    --opacity-osd:    0.85;
+
 }
