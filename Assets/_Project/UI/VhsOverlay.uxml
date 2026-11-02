@@ -2,8 +2,8 @@
     <Style src="project://database/Assets/_Project/UI/Styles/theme.uss?fileID=7433441132597879392&amp;guid=0f05c9a17dcd0424686c80118711a356&amp;type=3#theme"/>
     <Style src="project://database/Assets/_Project/UI/Styles/vhs.uss?fileID=7433441132597879392&amp;guid=83ad95182d0c42d44ac5ce65af6e5fd9&amp;type=3#vhs"/>
     <ui:VisualElement name="vhs-root" picking-mode="Ignore" class="vhs-root">
-        <ui:VisualElement name="scanlines" picking-mode="Ignore" class="vhs-scanlines"/>
-        <ui:VisualElement name="roll" picking-mode="Ignore" class="vhs-roll"/>
+        <ui:VisualElement name="scanlines" picking-mode="Ignore" usage-hints="LargePixelCoverage" class="vhs-scanlines"/>
+        <ui:VisualElement name="roll" picking-mode="Ignore" usage-hints="DynamicTransform" class="vhs-roll"/>
         <ui:Label name="osd-play" text="PLAY ▶" picking-mode="Ignore" class="osd osd--left"/>
         <ui:Label name="osd-time" text="00:00:00" picking-mode="Ignore" class="osd osd--right"/>
     </ui:VisualElement>

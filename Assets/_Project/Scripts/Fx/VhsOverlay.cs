@@ -87,10 +87,6 @@ public class VhsOverlay : MonoBehaviour
         root.Query<VisualElement>().ForEach(
             element => element.pickingMode = PickingMode.Ignore);
 
-        // Pistas de uso (experimento): se fijan antes de animar.
-        roll.usageHints = UsageHints.DynamicTransform;
-        scanlines.usageHints = UsageHints.LargePixelCoverage;
-
         // La banda empieza oculta; RefreshRoll decide cuándo mostrarla.
         roll.style.display = DisplayStyle.None;
 
@@ -209,8 +205,15 @@ public class VhsOverlay : MonoBehaviour
         for (int y = 0; y < height; y++)
         {
             float t = (y + 0.5f) / height;
-            float a = 1f - Mathf.Abs(t * 2f - 1f);   // 0 en los bordes, 1 en el centro
+
+            // Degradado triangular original.
+            float a = 1f - Mathf.Abs(t * 2f - 1f);
+
+            // Concentrar la transparencia alrededor del centro.
+            a = a * a * a;
+
             pixels[y] = new Color32(255, 70, 110, (byte)Mathf.RoundToInt(a * 255f));
+
         }
 
         rollTexture.SetPixels32(pixels);

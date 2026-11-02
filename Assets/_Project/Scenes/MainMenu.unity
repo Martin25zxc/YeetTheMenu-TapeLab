@@ -149,8 +149,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f63443ec7fc7c4782a64a0b73a6306, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VhsOverlay
-  scanlineAlpha: 0.55
+  clock: {fileID: 0}
+  scanlineAlpha: 0.3
   linesPerScreen: 360
+  rollAlpha: 0.036
+  rollPeriodSeconds: 9
+  rollHeightPercent: 8
+  hideRollWhenFrozen: 1
 --- !u!114 &597362304
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -343,7 +348,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 17.777779, y: 10, z: 1}
+  m_LocalScale: {x: 16, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
