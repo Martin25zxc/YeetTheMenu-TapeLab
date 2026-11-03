@@ -26,6 +26,18 @@
     display: none;
 }
 
+.vhs-glitch-band {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: none;
+
+    background-color: var(--color-glitch-band);
+
+    border-top-width: 1px;
+    border-top-color: var(--color-glitch-edge);
+}
+
 .osd {
     position: absolute;
     top: var(--margin-osd-top, 24px);
@@ -36,6 +48,7 @@
     opacity: var(--opacity-osd, 0.85);
     white-space: nowrap;
     text-shadow: 2px 0 0 rgba(255, 0, 60, 0.6);
+    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/DepartureMono-1.500/DepartureMono-Regular.otf?fileID=12800000&guid=6871d5e07c1b4cb4b9749eff53476140&type=3#DepartureMono-Regular");
 }
 
 .osd--left {

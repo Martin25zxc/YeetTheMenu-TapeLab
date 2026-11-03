@@ -18,11 +18,13 @@ namespace YeetTheMenu.Fx
         [SerializeField, Range(0f, 1f)] private float scanlines = 1f;
         [SerializeField, Range(0f, 1f)] private float roll = 1f;
         [SerializeField, Range(0f, 1f)] private float grain = 1f;
+        [SerializeField, Range(0f, 1f)] private float glitch = 1f;
+
 
         public RetroFxState ToState() => new RetroFxState
         {
             motion = motion, fog = fog, dust = dust,
-            scanlines = scanlines, roll = roll, grain = grain
+            scanlines = scanlines, roll = roll, grain = grain, glitch = glitch
         };
     }
 }

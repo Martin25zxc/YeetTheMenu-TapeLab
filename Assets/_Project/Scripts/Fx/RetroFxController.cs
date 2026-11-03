@@ -99,6 +99,8 @@ namespace YeetTheMenu.Fx
             next.scanlines *= user;
             next.roll *= user;
             next.grain *= user;
+            next.glitch *= user; 
+
 
             if (reducedEffects)
                 next.motion = 0f;
@@ -107,6 +109,7 @@ namespace YeetTheMenu.Fx
             if (next.motion <= 0f)
             {
                 next.grain = 0f;                          // el grano de URP no se puede congelar
+                next.glitch = 0f;
                 if (hideRollWhenFrozen) next.roll = 0f;   // una banda quieta parece una mancha
                 if (hideDustWhenFrozen) next.dust = 0f;
             }

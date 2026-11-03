@@ -4,7 +4,8 @@
     <ui:VisualElement name="vhs-root" picking-mode="Ignore" class="vhs-root">
         <ui:VisualElement name="scanlines" picking-mode="Ignore" usage-hints="LargePixelCoverage" class="vhs-scanlines"/>
         <ui:VisualElement name="roll" picking-mode="Ignore" usage-hints="DynamicTransform" class="vhs-roll"/>
-        <ui:Label name="osd-play" text="PLAY ▶" picking-mode="Ignore" class="osd osd--left"/>
+        <ui:VisualElement name="glitch-band" class="vhs-glitch-band" picking-mode="Ignore" />
+        <ui:Label name="osd-play" text="PLAY▶" picking-mode="Ignore" class="osd osd--left"/>
         <ui:Label name="osd-time" text="00:00:00" picking-mode="Ignore" class="osd osd--right"/>
     </ui:VisualElement>
 </ui:UXML>

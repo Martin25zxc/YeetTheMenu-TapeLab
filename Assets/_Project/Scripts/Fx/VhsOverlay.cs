@@ -27,6 +27,8 @@ namespace YeetTheMenu.Fx
         [Tooltip("1 = curva triangular (como el mock). 3 = cúbica, más concentrada.")]
         [SerializeField, Range(0.5f, 4f)] private float rollCurveExponent = 3f;
 
+        private VisualElement glitchBand;
+
         private UIDocument document;
         private VisualElement scanlines;
         private VisualElement roll;
@@ -59,11 +61,15 @@ namespace YeetTheMenu.Fx
         private void OnEnable()
         {
             startTime = Time.unscaledTime;
+            GlitchDirector.Began += OnGlitchBegan;
+            GlitchDirector.Ended += OnGlitchEnded;
             TryBind();                 // si el árbol aún no existe, Update lo reintenta
         }
 
         private void OnDisable()
         {
+            GlitchDirector.Began -= OnGlitchBegan;
+            GlitchDirector.Ended -= OnGlitchEnded;
             Unbind();
         }
 
@@ -99,16 +105,19 @@ namespace YeetTheMenu.Fx
             scanlines = root?.Q<VisualElement>("scanlines");
             roll = root?.Q<VisualElement>("roll");
             timeLabel = root?.Q<Label>("osd-time");
+            glitchBand = root?.Q<VisualElement>("glitch-band");
 
-            if (scanlines == null || roll == null || timeLabel == null)
+            if (scanlines == null || roll == null || timeLabel == null || glitchBand == null)
             {
                 Unbind();
 
                 if (++bindAttempts == 120)
                     Debug.LogError("VhsOverlay: no se encuentran los elementos del UXML " +
-                                   "(scanlines, roll, osd-time).", this);
+                                   "(scanlines, roll, osd-time, glitch-band).", this);
                 return false;
             }
+            // Política: si el árbol se recrea durante un fallo, el fallo se cancela. ToDo Revisar 
+            glitchBand.style.display = DisplayStyle.None;
 
             root.pickingMode = PickingMode.Ignore;
             root.Query<VisualElement>().ForEach(e => e.pickingMode = PickingMode.Ignore);
@@ -139,6 +148,7 @@ namespace YeetTheMenu.Fx
             scanlines = null;
             roll = null;
             timeLabel = null;
+            glitchBand = null;
         }
 
         // ---------- Scanlines ----------
@@ -314,6 +324,24 @@ namespace YeetTheMenu.Fx
 
             roll.style.translate = new StyleTranslate(
                 new Translate(new Length(0f), Length.Percent(yPercent)));
+        }
+
+
+        // ---------- Glitch ----------
+        private void OnGlitchBegan(GlitchEvent e)
+        {
+            if (!bound || glitchBand == null)
+                return;
+
+            glitchBand.style.top = Length.Percent(e.topPercent);
+            glitchBand.style.height = Length.Percent(e.heightPercent);
+            glitchBand.style.opacity = e.intensity;
+            glitchBand.style.display = DisplayStyle.Flex;
+        }
+
+        private void OnGlitchEnded()
+        {
+            if (bound) glitchBand.style.display = DisplayStyle.None;
         }
     }
 }

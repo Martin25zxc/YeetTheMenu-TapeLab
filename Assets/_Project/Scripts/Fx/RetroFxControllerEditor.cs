@@ -29,6 +29,7 @@ namespace YeetTheMenu.Fx.EditorTools
                 EditorGUILayout.Slider("scanlines", s.scanlines, 0f, 1f);
                 EditorGUILayout.Slider("roll", s.roll, 0f, 1f);
                 EditorGUILayout.Slider("grain", s.grain, 0f, 1f);
+                EditorGUILayout.Slider("glitch", s.glitch, 0f, 1f);
             }
 
             Repaint();   // refresca cada frame mientras se juega

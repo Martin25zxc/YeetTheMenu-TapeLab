@@ -8,11 +8,14 @@
     --time-hover: 0.4s;
     -unity-font-definition: url("project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=2230732570650464555&guid=fa0847300a7a0f44ebd3724b67ea2b17&type=3#NotInter-Regular");
 
-        /* OSD */
+    /* OSD */
     --color-osd:      rgb(241, 230, 232);
     --size-osd:       27px;
     --margin-osd-x:   32px;
     --margin-osd-top: 24px;
     --opacity-osd:    0.85;
 
+    /* Glitch */
+    --color-glitch-band: rgba(30, 140, 190, 0.14);
+    --color-glitch-edge: rgba(255, 255, 255, 0.25);
 }

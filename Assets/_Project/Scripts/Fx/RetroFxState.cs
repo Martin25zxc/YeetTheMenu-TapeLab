@@ -15,21 +15,22 @@ namespace YeetTheMenu.Fx
         public float scanlines;
         public float roll;
         public float grain;
+        public float glitch;  
 
         /// <summary>Todo al 100 %. Valor por defecto cuando no hay controlador.</summary>
         public static readonly RetroFxState Full = new RetroFxState
         {
-            motion = 1f, fog = 1f, dust = 1f, scanlines = 1f, roll = 1f, grain = 1f
+            motion = 1f, fog = 1f, dust = 1f, scanlines = 1f, roll = 1f, grain = 1f, glitch = 1f
         };
 
         // Comparación exacta a propósito: detecta cambios, no mide parecido.
         public bool Equals(RetroFxState o) =>
             motion == o.motion && fog == o.fog && dust == o.dust &&
-            scanlines == o.scanlines && roll == o.roll && grain == o.grain;
+            scanlines == o.scanlines && roll == o.roll && grain == o.grain && glitch == o.glitch;
 
         public override bool Equals(object obj) => obj is RetroFxState o && Equals(o);
 
         public override int GetHashCode() =>
-            HashCode.Combine(motion, fog, dust, scanlines, roll, grain);
+            HashCode.Combine(motion, fog, dust, scanlines, roll, grain, glitch);
     }
 }

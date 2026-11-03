@@ -93,7 +93,6 @@ namespace YeetTheMenu.Fx
             if (intensityChanged)
                 ApplyIntensity();
 
-            // Invisible: no hay nada que mover.
             float dt = RetroFx.ScaledDelta;
             bool visible = psRenderer.enabled;
 
