@@ -18,3 +18,4 @@ MonoBehaviour:
   scanlines: 1
   roll: 1
   grain: 1
+  glitch: 1
