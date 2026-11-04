@@ -52,8 +52,17 @@
     rotate: 1deg;
 }
 
-.menu-btn:hover,
-.menu-btn:focus {
+.menu-btn:hover {
+    color: var(--color-hover);
+    scale: 1.07 1.07;
+}
+
+.input-directional .menu-btn:hover {
+    color: var(--color-fg);
+    scale: 1 1;
+}
+
+.input-directional .menu-btn:focus {
     color: var(--color-hover);
     scale: 1.07 1.07;
 }
@@ -86,8 +95,19 @@
     transition-duration: var(--time-hover);
 }
 
-.back-btn:hover,
-.back-btn:focus {
+.back-btn:hover {
+    color: var(--color-hover);
+    opacity: 1;
+    scale: 1.07 1.07;
+}
+
+.input-directional .back-btn:hover {
+    color: var(--color-fg);
+    opacity: 0.7;
+    scale: 1 1;
+}
+
+.input-directional .back-btn:focus {
     color: var(--color-hover);
     opacity: 1;
     scale: 1.07 1.07;

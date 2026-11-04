@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
     <Style src="project://database/Assets/_Project/UI/Styles/credits.uss?fileID=7433441132597879392&amp;guid=7f511d40ed98cdd47bf714a24c78b9c0&amp;type=3#credits"/>
-    <ui:VisualElement name="screen-credits" class="screen">
+    <ui:VisualElement name="screen-credits" class="screen" style="-unity-font-definition: url(&quot;project://database/Assets/_Project/Art/Fonts/Special_Elite/SpecialElite-Regular.ttf?fileID=12800000&amp;guid=5b14ebc0979500d4192ce58b0b38a960&amp;type=3#SpecialElite-Regular&quot;);">
         <ui:Label text="YEET THE PRIEST" class="panel-title"/>
         <ui:VisualElement class="credits-list">
             <ui:VisualElement class="credit">
