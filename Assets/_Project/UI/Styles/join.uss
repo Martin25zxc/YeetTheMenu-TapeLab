@@ -44,25 +44,51 @@
     opacity: 0.55;
 }
 
-
-.btn-row {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;   /* botones de distinto tamaño, alineados por el centro */
-    margin-top: 12px;
+/* Mide lo mismo que el campo (PASTE es absoluto y no cuenta): el campo queda centrado. */
+.code-row {
+    margin-top: 34px;
 }
 
-.btn-row .menu-btn {
-    margin: 0 48px;   /* ≈ 1,6 veces la letra entre botones: ya no se leen como una frase */
+.code-field {
+    width: 480px;
+    margin: 0;
+    --unity-cursor-color: var(--color-accent);
 }
 
-/* Acción secundaria: más chica y tenue. CONFIRM queda como la principal.
-   Dos clases a propósito: así no depende del orden en que se cargan las hojas. */
-.menu-btn.menu-btn--secondary {
-    font-size: 40px;
-    opacity: 0.75;
+/* Ayuda del campo: chica, con borde, claramente subordinada a CONFIRM. */
+.paste-btn {
+    position: absolute;
+    left: 100%;          /* arranca en el borde derecho del campo */
+    bottom: 6px;         /* alineado con la línea inferior del campo */
+    margin: 0 0 0 24px;  /* separación del campo */
+    padding: 6px 14px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 1px;
+    border-color: var(--color-fg);
+    border-radius: 0;
+    font-size: 22px;
+    letter-spacing: 3px;
+    color: var(--color-fg);
+    opacity: 0.7;
+    transition-property: color, border-color, opacity;
+    transition-duration: var(--time-hover);
 }
 
-.joining-title {
-    font-size: 72px;
+.paste-btn:hover {
+    color: var(--color-hover);
+    border-color: var(--color-hover);
+    opacity: 1;
+}
+
+/* Modo teclado/mando: el hover se ignora y manda el foco, como en el resto del menú. */
+.input-directional .paste-btn:hover {
+    color: var(--color-fg);
+    border-color: var(--color-fg);
+    opacity: 0.7;
+}
+
+.input-directional .paste-btn:focus {
+    color: var(--color-hover);
+    border-color: var(--color-hover);
+    opacity: 1;
 }
