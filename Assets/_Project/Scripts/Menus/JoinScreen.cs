@@ -13,6 +13,7 @@ namespace YeetTheMenu.Menus
     {
         private static readonly string HintText = $"{LobbyCode.Length} letters or numbers";
         private const string HintClass = "code-error--hint";
+        private const int MaxInput = 20;   // tope de la UI: más que esto se rechaza, nunca se recorta
 
         [Tooltip("Pantalla que ejecuta el intento de unión.")]
         [SerializeField] private JoiningScreen joining;
@@ -24,7 +25,7 @@ namespace YeetTheMenu.Menus
         // VISTA: se reemplaza si el árbol se recrea.
         private TextField codeField;
         private Label errorLabel;
-
+        
         protected override void OnBuild(VisualElement root)
         {
             codeField = root.Q<TextField>("code-field");
@@ -68,6 +69,13 @@ namespace YeetTheMenu.Menus
         private void OnCodeChanged(ChangeEvent<string> evt)
         {
             string normalized = LobbyCode.Normalize(evt.newValue);
+            if (normalized.Length > MaxInput)
+            {
+                // Se rechaza entero y se explica. El campo vuelve a lo que había.
+                codeField.SetValueWithoutNotify(enteredCode);
+                ShowError($"That's too long to be a lobby code. Codes have {LobbyCode.Length} letters or numbers.");
+                return;
+            }
 
             // Una TECLA que pasa del límite se rechaza, como en los juegos con códigos de sala.
             // Un PEGADO nunca se recorta: si sobra, se ve completo y se explica.

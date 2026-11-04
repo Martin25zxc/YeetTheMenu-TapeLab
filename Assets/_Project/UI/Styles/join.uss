@@ -1,11 +1,4 @@
 /* join.uss: pantallas Join y Joining (laboratorio). */
-
-.code-field {
-    width: 480px;
-    margin: 34px 0 0 0;
-    --unity-cursor-color: var(--color-accent);   /* el cursor de texto en magenta, como el mock */
-}
-
 /* El TextField es un contenedor: lo que se ve es su elemento interno.
    El tema por defecto le pone fondo, borde y esquinas: acá se quitan. */
 .code-field .unity-base-text-field__input {
