@@ -16,6 +16,7 @@
 
 }
 
+
 .logo {
     width: 370px;
     height: 330px;
@@ -68,8 +69,9 @@
 }
 
 .font-body {
-    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/Lacquer/Lacquer-Regular.ttf?fileID=12800000&guid=150021e55bb757e449b1a6db9363764e&type=3#Lacquer-Regular");
+    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/Special_Elite/SpecialElite-Regular.ttf?fileID=12800000&guid=5b14ebc0979500d4192ce58b0b38a960&type=3#SpecialElite-Regular");
 }
+
 
 .panel-title {
     font-size: 62px;
