@@ -220,6 +220,7 @@ GameObject:
   - component: {fileID: 650482874}
   - component: {fileID: 650482876}
   - component: {fileID: 650482877}
+  - component: {fileID: 650482878}
   m_Layer: 5
   m_Name: MainMenuUI
   m_TagString: Untagged
@@ -298,6 +299,22 @@ MonoBehaviour:
   completionTimeout: 0.75
   instantTransitions: 0
   logTransitions: 0
+--- !u!114 &650482878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650482873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57ba8447f7aa4154597076ff5445eef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.UI.UiInputMode
+  targetName: root
+  firstMoveReveals: 1
+  hideCursorWhenDirectional: 0
+  logEvents: 0
 --- !u!1 &713394567
 GameObject:
   m_ObjectHideFlags: 0
