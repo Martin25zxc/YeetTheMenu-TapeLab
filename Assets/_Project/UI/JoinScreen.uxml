@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ui="UnityEngine.UIElements"
+    xmlns:uie="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd"
+>
+    <Style src="project://database/Assets/_Project/UI/Styles/join.uss?fileID=7433441132597879392&amp;guid=9bf3b912078422e46bb00b81faaa646e&amp;type=3#join"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/theme.uss?fileID=7433441132597879392&amp;guid=0f05c9a17dcd0424686c80118711a356&amp;type=3#theme"/>
+    <ui:VisualElement name="screen-join" class="screen">
+        <ui:Label text="JOIN LOBBY" class="panel-title"/>
+        <ui:TextField name="code-field" placeholder-text="CODE" class="code-field font-body"/>
+        <ui:Label name="code-error" class="code-error font-body"/>
+        <ui:VisualElement class="btn-row">
+            <ui:Button name="btn-paste" text="PASTE CODE" class="menu-btn"/>
+            <ui:Button name="btn-confirm" text="CONFIRM" class="menu-btn"/>
+        </ui:VisualElement>
+        <ui:Button name="btn-back" text="‹ Back (Esc)" class="back-btn font-body"/>
+    </ui:VisualElement>
+</ui:UXML>

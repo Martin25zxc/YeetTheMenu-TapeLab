@@ -17,10 +17,13 @@ namespace YeetTheMenu.UI
     /// La pantalla nunca se muestra ni se oculta sola: eso es trabajo exclusivo del stack.
     ///
     /// Ciclo de vida que garantiza el stack:
-    ///   OnBuild(root) → se instanció un árbol para esta pantalla
-    ///   OnShow()      → está por aparecer (todavía invisible)
-    ///   OnHide()      → YA quedó oculta (terminó el fundido)
-    ///   OnUnbind()    → el árbol se descarta; siempre empareja un OnBuild
+    ///   OnBuild(root) → se creó una VISTA para esta pantalla (se repite si el árbol se recrea)
+    ///   OnShow()      → ENTRA en la navegación: está por aparecer (todavía invisible)
+    ///   OnHide()      → SALIÓ de la navegación: ya quedó oculta
+    ///   OnUnbind()    → la vista se descarta; siempre empareja un OnBuild
+    /// Recrear la vista NO dispara OnShow ni OnHide: la pantalla nunca dejó de estar abierta.
+    /// Lo que deba sobrevivir a una recreación (texto escrito, errores) vive en campos,
+    /// y OnBuild lo vuelve a pintar.
     /// </summary>
     public abstract class MenuScreen : MonoBehaviour
     {
@@ -63,8 +66,23 @@ namespace YeetTheMenu.UI
             clickActions.Clear();
         }
 
-        internal void Show() => OnShow();
-        internal void Hide() => OnHide();
+        /// <summary>true entre su OnShow y su OnHide. Recrear la vista no lo cambia.</summary>
+        public bool IsShown { get; private set; }
+
+        // Idempotentes: reconstruir el árbol visual no es entrar ni salir de la pantalla.
+        internal void Show()
+        {
+            if (IsShown) return;
+            IsShown = true;
+            OnShow();
+        }
+
+        internal void Hide()
+        {
+            if (!IsShown) return;
+            IsShown = false;
+            OnHide();
+        }
         internal Focusable GetInitialFocus() => InitialFocus;
         internal bool HandleBack() => OnBackRequested();
 

@@ -454,10 +454,9 @@ namespace YeetTheMenu.UI
             eventRoot?.UnregisterCallback<NavigationCancelEvent>(OnNavigationCancel);
             eventRoot = null;
 
-            // Cada Show recibe su Hide, y cada Build su Unbind.
+            // Las que estaban SALIENDO completan su salida: era navegación real, interrumpida.
+            // Las visibles NO reciben Hide: descartar la vista no es salir de la pantalla.
             for (int i = 0; i < leavingScreens.Count; i++) leavingScreens[i].Hide();
-            ComputeVisible(visibleBefore);
-            for (int i = 0; i < visibleBefore.Count; i++) visibleBefore[i].Hide();
 
             foreach (KeyValuePair<MenuScreen, VisualElement> pair in instances)
             {

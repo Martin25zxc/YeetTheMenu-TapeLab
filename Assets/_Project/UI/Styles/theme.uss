@@ -4,6 +4,7 @@
     --color-accent: rgb(199, 10, 63);
     --color-hover: rgb(255, 61, 120);
     --color-blue: rgb(21, 36, 115);
+    --color-warn: rgb(255, 225, 74);
     --size-button: 60px;
     --gap-menu: 30px;
     --time-hover: 0.4s;

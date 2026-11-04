@@ -1,0 +1,52 @@
+/* join.uss: pantallas Join y Joining (laboratorio). */
+
+.code-field {
+    width: 480px;
+    margin: 34px 0 0 0;
+    --unity-cursor-color: var(--color-accent);   /* el cursor de texto en magenta, como el mock */
+}
+
+/* El TextField es un contenedor: lo que se ve es su elemento interno.
+   El tema por defecto le pone fondo, borde y esquinas: acá se quitan. */
+.code-field .unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-fg);
+    border-radius: 0;
+    padding: 14px;
+    font-size: 38px;
+    letter-spacing: 15px;
+    color: var(--color-fg);
+    -unity-text-align: middle-center;
+}
+
+/* El foco de un campo de texto se ve SIEMPRE, también con mouse:
+   es donde se escribe (igual que :focus-visible con un input web). */
+.code-field:focus .unity-base-text-field__input {
+    border-bottom-color: var(--color-accent);
+}
+
+.code-error {
+    min-height: 34px;   /* reserva el espacio: el layout no salta cuando aparece el error */
+    max-width: 900px;
+    margin-top: 12px;
+    font-size: 22px;
+    color: var(--color-warn);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.btn-row {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.btn-row .menu-btn {
+    margin: 0 24px;   /* dos clases ganan al margin-bottom de .menu-btn */
+}
+
+.joining-title {
+    font-size: 72px;
+}

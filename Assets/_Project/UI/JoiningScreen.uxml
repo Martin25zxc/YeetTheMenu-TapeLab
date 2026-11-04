@@ -1,0 +1,9 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/Styles/join.uss?fileID=7433441132597879392&amp;guid=9bf3b912078422e46bb00b81faaa646e&amp;type=3#join"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/theme.uss?fileID=7433441132597879392&amp;guid=0f05c9a17dcd0424686c80118711a356&amp;type=3#theme"/>
+    <ui:VisualElement name="screen-joining" class="screen">
+        <ui:Label text="JOINING HAUNT..." class="panel-title joining-title"/>
+        <ui:Button name="btn-cancel" text="‹ Cancel (Esc)" class="back-btn font-body"/>
+    </ui:VisualElement>
+</ui:UXML>
