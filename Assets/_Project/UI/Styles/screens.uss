@@ -1,0 +1,58 @@
+/* screens.uss: navegación entre pantallas (paquete YeetTheMenu.UI).
+   Sin colores ni fuentes del proyecto: solo layout y transiciones. */
+
+/* Contenedor de pantallas: ocupa todo el #root. */
+.nav-host {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+}
+
+/* La "caja" de cada pantalla instanciada (su TemplateContainer).
+   Estado base = invisible. Sin position absolute, la caja mide 0×0. */
+.nav-screen {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    opacity: 0;
+    scale: 0.985 0.985;
+    transition-property: opacity, scale;
+    transition-duration: 160ms;
+    transition-timing-function: ease-in-sine;
+}
+
+/* ENTRADA: estas duraciones rigen al pasar a este estado. */
+.nav-screen--visible {
+    opacity: 1;
+    scale: 1 1;
+    transition-duration: 260ms;
+    transition-delay: 110ms;
+    transition-timing-function: ease-out-sine;
+}
+
+/* SALIDA: rápida y sin retraso. */
+.nav-screen--leaving {
+    opacity: 0;
+    scale: 0.99 0.99;
+    transition-duration: 160ms;
+    transition-delay: 0s;
+    transition-timing-function: ease-in-sine;
+}
+
+/* Modificadores en el host. Dos clases ganan en especificidad a una,
+   así que estas reglas se imponen a --visible y --leaving. */
+.nav-host--reduced .nav-screen {
+    scale: 1 1;                 /* sin movimiento */
+    transition-duration: 120ms; /* el fundido se conserva: el cambio sigue siendo perceptible */
+    transition-delay: 0s;
+}
+
+.nav-host--instant .nav-screen {
+    transition-duration: 0s;
+    transition-delay: 0s;
+}
+
+/* Bloqueador del stack: transparente, encima de todo durante una transición.
+   El código controla si captura clics y foco; el estilo solo define que cubre la pantalla. */
+.nav-blocker {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+}

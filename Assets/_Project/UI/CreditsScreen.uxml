@@ -1,0 +1,41 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/credits.uss?fileID=7433441132597879392&amp;guid=7f511d40ed98cdd47bf714a24c78b9c0&amp;type=3#credits"/>
+    <ui:VisualElement name="screen-credits" class="screen">
+        <ui:Label text="YEET THE PRIEST" class="panel-title"/>
+        <ui:VisualElement class="credits-list">
+            <ui:VisualElement class="credit">
+                <ui:Label text="J" class="credit-name"/>
+                <ui:Label text="Environment Design · Character Art · Game and Level Design · Production" class="credit-role font-body"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="M" class="credit-name"/>
+                <ui:Label text="Technical Art · Game and Level Design · Production" class="credit-role font-body"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="P" class="credit-name"/>
+                <ui:Label text="UX/UI Consultant" class="credit-role font-body"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="A" class="credit-name"/>
+                <ui:Label text="Programming · Production" class="credit-role font-body"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="D" class="credit-name"/>
+                <ui:Label text="Testing · General Consulting" class="credit-role font-body"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="Thank you" class="credit-role font-body"/>
+                <ui:Label text="MYNTA &amp; PATO" class="credit-name"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="Special thanks to our cookie and pastry provider" class="credit-role font-body"/>
+                <ui:Label text="GABY" class="credit-name"/>
+            </ui:VisualElement>
+            <ui:VisualElement class="credit">
+                <ui:Label text="LITTLE HORSE GAMES" class="credit-name"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:Button name="btn-back" text="‹ Back (Esc)" class="back-btn font-body"/>
+    </ui:VisualElement>
+</ui:UXML>

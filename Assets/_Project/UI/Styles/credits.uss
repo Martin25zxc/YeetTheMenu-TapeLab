@@ -1,0 +1,28 @@
+/* Escala elegida para que los 8 créditos entren en 1080 px de alto. Ajustable. */
+.credits-list {
+    max-width: 1260px;
+    align-items: center;
+    margin-top: 28px;
+    margin-bottom: 28px;
+}
+
+.credit {
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.credit-name {
+    font-size: 44px;
+    letter-spacing: 3px;
+    color: var(--color-accent);
+    text-shadow: 2px 2px 0 var(--color-blue);
+    -unity-text-align: middle-center;
+}
+
+.credit-role {
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: var(--color-fg);
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
