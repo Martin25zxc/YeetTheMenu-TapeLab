@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using YeetTheMenu.UI;
 
-namespace YeetTheMenu.Lab
+namespace YeetTheMenu.Menus
 {
     /// <summary>Pantalla raíz del menú principal: conecta cada botón con su destino.</summary>
     public class MainMenuScreen : MenuScreen

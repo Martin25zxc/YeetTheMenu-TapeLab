@@ -3,14 +3,17 @@ using UnityEngine.UIElements;
 using YeetTheMenu.Online;
 using YeetTheMenu.UI;
 
-namespace YeetTheMenu.Lab
+namespace YeetTheMenu.Menus
 {
     /// <summary>
-    /// Pide el código, lo valida y abre Joining. Muestra los errores de formato y de conexión.
-    /// El ESTADO (código y error) vive en campos: la vista es desechable y OnBuild la repinta.
+    /// Pide el código, lo valida y abre Joining. Muestra la ayuda, los errores de formato y los de conexión.
+    /// El ESTADO (código y mensaje) vive en campos: la vista es desechable y OnBuild la repinta.
     /// </summary>
     public class JoinScreen : MenuScreen
     {
+        private static readonly string HintText = $"{LobbyCode.Length} letters or numbers";
+        private const string HintClass = "code-error--hint";
+
         [Tooltip("Pantalla que ejecuta el intento de unión.")]
         [SerializeField] private JoiningScreen joining;
 
@@ -32,7 +35,7 @@ namespace YeetTheMenu.Lab
                 return;
             }
 
-            // Sin maxLength a propósito: truncaría en silencio un código pegado demasiado largo.
+            // Sin maxLength a propósito: recortaría en silencio un código pegado demasiado largo.
             codeField.SetValueWithoutNotify(enteredCode);   // repinta el estado en la vista nueva
             codeField.RegisterValueChangedCallback(OnCodeChanged);
             // TrickleDown: el TextField no deja subir el Enter (NavigationSubmitEvent); hay que verlo en la bajada.
@@ -42,7 +45,7 @@ namespace YeetTheMenu.Lab
             BindClick(root, "btn-confirm", Submit);
             BindClick(root, "btn-back", OnBackClicked);
 
-            ShowError(errorMessage);   // repinta el error, si había uno
+            ShowError(errorMessage);   // repinta el mensaje, o la ayuda si no hay error
         }
 
         protected override void OnUnbind()
@@ -64,12 +67,14 @@ namespace YeetTheMenu.Lab
 
         private void OnCodeChanged(ChangeEvent<string> evt)
         {
-            // USS no tiene text-transform. Lo que se ve en el campo es exactamente lo que se valida.
             string normalized = LobbyCode.Normalize(evt.newValue);
-            if (normalized != evt.newValue) codeField.SetValueWithoutNotify(normalized);
 
-            enteredCode = normalized;
-            ShowError(null);   // como el mock: escribir borra el error
+            // Una TECLA que pasa del límite se rechaza, como en los juegos con códigos de sala.
+            // Un PEGADO nunca se recorta: si sobra, se ve completo y se explica.
+            if (normalized.Length > LobbyCode.Length && IsOneCharInserted(enteredCode, normalized))
+                normalized = enteredCode;
+
+            SetCode(normalized);
         }
 
         private void OnCodeSubmit(NavigationSubmitEvent evt) => Submit();   // Enter dentro del campo
@@ -79,17 +84,28 @@ namespace YeetTheMenu.Lab
             string pasted = LobbyCode.Normalize(GUIUtility.systemCopyBuffer);
             if (pasted.Length == 0)
             {
-                ShowError("Clipboard is empty.");
+                ShowError("The clipboard doesn't contain a code.");
                 return;
             }
-            codeField.value = pasted;   // con notificación: actualiza el estado y borra el error
+            SetCode(pasted);   // el botón sabe que es un pegado: nunca se rechaza ni se recorta
+        }
+
+        /// <summary>Único lugar donde cambia el código: actualiza estado, vista y mensaje juntos.</summary>
+        private void SetCode(string code)
+        {
+            if (codeField != null && codeField.value != code) codeField.SetValueWithoutNotify(code);
+            enteredCode = code;
+
+            // Escribir borra el error, como el mock, salvo que el código siga siendo demasiado largo.
+            ShowError(code.Length > LobbyCode.Length ? LengthMessage(code.Length) : null);
         }
 
         private void Submit()
         {
+            // Después de Normalize solo quedan caracteres válidos: lo único que puede fallar es la longitud.
             if (!LobbyCode.IsWellFormed(enteredCode))
             {
-                ShowError(MessageFor(LobbyJoinError.InvalidCode));
+                ShowError(LengthMessage(enteredCode.Length));
                 return;
             }
             if (joining == null)
@@ -108,13 +124,35 @@ namespace YeetTheMenu.Lab
 
         private void ShowError(string message)
         {
-            errorMessage = message;                                       // estado
-            if (errorLabel != null) errorLabel.text = message ?? string.Empty;   // vista (espacio reservado en USS)
+            errorMessage = message;   // estado
+            if (errorLabel == null) return;
+
+            // La línea reservada nunca queda vacía: sin error muestra la ayuda, tenue.
+            bool hasError = !string.IsNullOrEmpty(message);
+            errorLabel.text = hasError ? message : HintText;
+            errorLabel.EnableInClassList(HintClass, !hasError);
         }
+
+        /// <summary>true si 'next' es 'previous' con exactamente un carácter insertado: lo que hace una tecla.</summary>
+        private static bool IsOneCharInserted(string previous, string next)
+        {
+            if (next.Length != previous.Length + 1) return false;
+
+            int i = 0;
+            while (i < previous.Length && previous[i] == next[i]) i++;   // primer punto de diferencia
+
+            // Desde ahí, el resto de 'next' tiene que ser el resto de 'previous', corrido un lugar.
+            return string.CompareOrdinal(previous, i, next, i + 1, previous.Length - i) == 0;
+        }
+
+        private static string LengthMessage(int length) =>
+            length == 0
+                ? $"Enter the lobby code: {LobbyCode.Length} letters or numbers."
+                : $"Codes have {LobbyCode.Length} letters or numbers. This one has {length}.";
 
         private static string MessageFor(LobbyJoinError error) => error switch
         {
-            LobbyJoinError.InvalidCode => "Invalid code. Use exactly 6 letters or numbers, no spaces or symbols.",
+            LobbyJoinError.InvalidCode => "Invalid code.",
             LobbyJoinError.NotFound    => "No lobby found with that code.",
             LobbyJoinError.Full        => "That lobby is full.",
             LobbyJoinError.Network     => "Connection failed. Check your network and try again.",

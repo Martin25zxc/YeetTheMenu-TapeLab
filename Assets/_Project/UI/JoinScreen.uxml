@@ -13,8 +13,8 @@
         <ui:TextField name="code-field" placeholder-text="CODE" class="code-field font-body"/>
         <ui:Label name="code-error" class="code-error font-body"/>
         <ui:VisualElement class="btn-row">
-            <ui:Button name="btn-paste" text="PASTE CODE" class="menu-btn"/>
-            <ui:Button name="btn-confirm" text="CONFIRM" class="menu-btn"/>
+            <ui:Button name="btn-paste" text="PASTE CODE" class="menu-btn menu-btn--a menu-btn--secondary"/>
+            <ui:Button name="btn-confirm" text="CONFIRM" class="menu-btn menu-btn--b"/>
         </ui:VisualElement>
         <ui:Button name="btn-back" text="‹ Back (Esc)" class="back-btn font-body"/>
     </ui:VisualElement>

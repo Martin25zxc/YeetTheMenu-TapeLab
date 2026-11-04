@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 using YeetTheMenu.Online;
 using YeetTheMenu.UI;
 
-namespace YeetTheMenu.Lab
+namespace YeetTheMenu.Menus
 {
     /// <summary>
     /// "JOINING HAUNT...": ejecuta el intento de unión mientras la pantalla está abierta.

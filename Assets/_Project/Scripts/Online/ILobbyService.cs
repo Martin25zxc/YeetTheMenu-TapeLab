@@ -60,8 +60,8 @@ namespace YeetTheMenu.Online
         public const int Length = 6;
 
         /// <summary>
-        /// Quita solo lo que nunca puede formar parte de un código: espacios en cualquier posición
-        /// y minúsculas. Nunca recorta contenido: un código demasiado largo se ve y se rechaza.
+        /// Deja solo lo que puede formar parte de un código: letras A–Z y dígitos 0–9, en mayúsculas.
+        /// Quita espacios, guiones y cualquier otro símbolo. Nunca recorta: un código largo se ve completo.
         /// </summary>
         public static string Normalize(string raw)
         {
@@ -69,9 +69,11 @@ namespace YeetTheMenu.Online
 
             var builder = new StringBuilder(raw.Length);
             foreach (char c in raw)
-                if (!char.IsWhiteSpace(c))
-                    builder.Append(char.ToUpperInvariant(c));   // sin depender del idioma del sistema
-
+            {
+                char upper = char.ToUpperInvariant(c);   // sin depender del idioma del sistema
+                if ((upper >= 'A' && upper <= 'Z') || (upper >= '0' && upper <= '9'))
+                    builder.Append(upper);
+            }
             return builder.ToString();
         }
 

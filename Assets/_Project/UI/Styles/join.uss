@@ -37,14 +37,30 @@
     white-space: normal;
 }
 
+/* Sin error, la misma línea muestra la ayuda, tenue.
+   Va después de .code-error en el mismo archivo: igual especificidad, gana por orden. */
+.code-error--hint {
+    color: var(--color-fg);
+    opacity: 0.55;
+}
+
+
 .btn-row {
     flex-direction: row;
     justify-content: center;
+    align-items: center;   /* botones de distinto tamaño, alineados por el centro */
     margin-top: 12px;
 }
 
 .btn-row .menu-btn {
-    margin: 0 24px;   /* dos clases ganan al margin-bottom de .menu-btn */
+    margin: 0 48px;   /* ≈ 1,6 veces la letra entre botones: ya no se leen como una frase */
+}
+
+/* Acción secundaria: más chica y tenue. CONFIRM queda como la principal.
+   Dos clases a propósito: así no depende del orden en que se cargan las hojas. */
+.menu-btn.menu-btn--secondary {
+    font-size: 40px;
+    opacity: 0.75;
 }
 
 .joining-title {
