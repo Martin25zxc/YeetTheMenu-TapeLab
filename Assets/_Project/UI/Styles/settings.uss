@@ -1,0 +1,88 @@
+/* settings.uss: pantalla Settings.
+   Las filas se construyen desde datos; su aspecto vive acá (A4).
+   Escala respecto del mock: ~1,5× (16 px del mock ≈ 24 px acá). */
+
+/* Contenedor de pestañas. Vacío hasta la etapa 6. */
+.settings-tabs {
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 16px;
+}
+
+/* La lista: ancho del mock (40rem ≈ 960 px) y alto máximo del mock (46 %). U23 */
+.settings-rows {
+    width: 960px;
+    max-width: 88%;
+    max-height: 46%;
+    margin-top: 24px;
+}
+
+/* Una fila: etiqueta a la izquierda, control a la derecha, línea tenue abajo. */
+.settings-row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(232, 217, 220, 0.13);   /* #e8d9dc22 del mock */
+}
+
+.settings-row__label {
+    flex-shrink: 1;
+    font-size: 24px;
+    color: var(--color-fg);
+    white-space: normal;
+}
+
+.settings-row__control {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 48px;
+}
+
+/* Línea reservada (S19). Vacía hasta la etapa 6, pero ya ocupa su lugar: el layout no salta. */
+.settings-desc {
+    min-height: 30px;
+    max-width: 900px;
+    margin-top: 16px;
+    font-size: 20px;
+    color: var(--color-fg);
+    opacity: 0.7;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+/* ── Slider ── Restilado modesto a propósito (U16). Verificar nombres con el UI Toolkit Debugger. */
+
+.settings-slider {
+    width: 320px;
+    margin: 0;
+}
+
+.settings-slider .unity-base-slider__tracker {
+    background-color: rgba(232, 217, 220, 0.25);
+    border-width: 0;
+}
+
+.settings-slider .unity-base-slider__dragger {
+    background-color: var(--color-accent);
+    border-width: 0;
+}
+
+/* El campo numérico de showInputField, como el .num del mock: transparente, con línea inferior. */
+.settings-slider .unity-base-slider__text-field {
+    width: 72px;
+    margin-left: 16px;
+}
+
+.settings-slider .unity-base-text-field__input {
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: var(--color-fg);
+    border-radius: 0;
+    font-size: 22px;
+    color: var(--color-fg);
+    -unity-text-align: middle-right;
+}

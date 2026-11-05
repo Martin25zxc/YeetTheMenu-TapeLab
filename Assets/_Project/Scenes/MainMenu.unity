@@ -317,6 +317,7 @@ Transform:
   - {fileID: 1930218862}
   - {fileID: 1628004654}
   - {fileID: 121469978}
+  - {fileID: 1292521377}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &650482876
@@ -465,7 +466,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 17.772512, y: 10, z: 1}
+  m_LocalScale: {x: 17.771738, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -655,6 +656,56 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &1292521376
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1292521377}
+  - component: {fileID: 1292521378}
+  m_Layer: 5
+  m_Name: Screen_Settings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1292521377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292521376}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 650482875}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1292521378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1292521376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7fb05daa371854e8a4603b9b4b9230, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Menus.SettingsScreen
+  id: settings
+  view: {fileID: 9197481963319205126, guid: db2d1af8c35398c45950165404bcbf19, type: 3}
+  backdrop: 0
+  settings: {fileID: 1838113434}
+  rowTemplate: {fileID: 9197481963319205126, guid: d96179649ce06b345b92f311df01be8a, type: 3}
+  tabId: graphics
 --- !u!1 &1297983985
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,8 +917,85 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 895562571}
+  - {fileID: 1838113431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1838113430
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1838113431}
+  - component: {fileID: 1838113434}
+  - component: {fileID: 1838113433}
+  - component: {fileID: 1838113432}
+  m_Layer: 0
+  m_Name: GameSettings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1838113431
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838113430}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1752336497}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1838113432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838113430}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70ebe0a84c4074b4187b975c30156b7d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Lab.SettingsProbe
+  settings: {fileID: 1838113434}
+  id: retro-filter
+  value: 30
+--- !u!114 &1838113433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838113430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a11d9a854b966734b8ed9e88d7135b7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Menus.SettingsApplier
+  settings: {fileID: 1838113434}
+  retroFx: {fileID: 1297983988}
+--- !u!114 &1838113434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1838113430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e61d951a0de0de418ae4ede11de130e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Settings.GameSettings
+  catalog: {fileID: 11400000, guid: 73f99ce5eea216e4aa5bf8c50ee7d079, type: 2}
 --- !u!1 &1879541249
 GameObject:
   m_ObjectHideFlags: 0

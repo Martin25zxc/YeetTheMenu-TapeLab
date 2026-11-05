@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbab7e36a9c07944a855d351939ba6ff, type: 3}
+  m_Name: SC_TapeLab
+  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Settings.SettingsCatalog
+  tabs:
+  - id: graphics
+    label: Graphics
+    options:
+    - id: retro-filter
+      label: Retro filter
+      description: 
+      kind: 0
+      mode: 0
+      min: 0
+      max: 100
+      defaultValue: 0
+      choices: []
+    - id: sound
+      label: Sound
+      description: 
+      kind: 0
+      mode: 1
+      min: 0
+      max: 100
+      defaultValue: 80
+      choices: []
+  - id: NEw
+    label: NEw
+    options:
+    - id: 2
+      label: NEw
+      description: 
+      kind: 0
+      mode: 1
+      min: 0
+      max: 100
+      defaultValue: 80
+      choices: []

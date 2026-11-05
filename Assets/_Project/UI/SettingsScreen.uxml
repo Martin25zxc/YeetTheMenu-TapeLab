@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/_Project/UI/Styles/theme.uss?fileID=7433441132597879392&amp;guid=0f05c9a17dcd0424686c80118711a356&amp;type=3#theme"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/menu.uss?fileID=7433441132597879392&amp;guid=5ac399bf8588e5d46be6a699383eb2dd&amp;type=3#menu"/>
+    <Style src="project://database/Assets/_Project/UI/Styles/settings.uss?fileID=7433441132597879392&amp;guid=b031c9cb20c06be4c9a42c6dfd36cdd3&amp;type=3#settings"/>
+    <ui:VisualElement name="screen-settings" class="screen">
+        <ui:Label text="SETTINGS" class="panel-title"/>
+        <ui:VisualElement name="settings-tabs" class="settings-tabs"/>
+        <ui:ScrollView name="settings-rows" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-rows">
+            <ui:VisualElement name="preview-row" class="settings-row font-body">
+                <ui:Label text="Retro filter" class="settings-row__label"/>
+                <ui:VisualElement class="settings-row__control">
+                    <ui:SliderInt low-value="0" high-value="100" value="70" show-input-field="true" class="settings-slider"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+        <ui:Label name="settings-desc" class="settings-desc font-body"/>
+        <ui:Button name="btn-back" text="‹ Back (Esc)" class="back-btn font-body"/>
+    </ui:VisualElement>
+</ui:UXML>
