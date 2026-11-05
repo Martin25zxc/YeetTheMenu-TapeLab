@@ -8,7 +8,7 @@ namespace YeetTheMenu.Settings
     {
         public string Id { get; }
         public string Label { get; }
-        public IReadOnlyList<SettingOption> Options { get; }   // de solo lectura hacia afuera (S13)
+        public IReadOnlyList<SettingOption> Options { get; }   // de solo lectura hacia afuera: nadie de afuera puede agregar ni quitar opciones
 
         public SettingsTab(string id, string label, IReadOnlyList<SettingOption> options)
         {
@@ -22,7 +22,7 @@ namespace YeetTheMenu.Settings
     /// Qué opciones existen en este proyecto, agrupadas en pestañas.
     /// Es el punto de enganche: la escena apunta a un asset, pero el contenido lo escribe
     /// una subclase en código, donde se ve entero, se diffea y un id mal escrito no compila.
-    /// Otro proyecto usa el mismo código con su propia subclase: eso es lo "adaptable" (S31).
+    /// Otro proyecto usa el mismo código con su propia subclase: eso es lo que lo hace adaptable.
     /// Ningún script lo escribe en ejecución.
     /// </summary>
     public abstract class SettingsCatalog : ScriptableObject

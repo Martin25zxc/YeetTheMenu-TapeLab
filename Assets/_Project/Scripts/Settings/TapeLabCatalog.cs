@@ -12,7 +12,7 @@ namespace YeetTheMenu.Settings
         public const string RetroFilter = "retro-filter";
         public const string MasterVolume = "master-volume";
 
-        // Llegan con sus etapas: 4 reduced-effects · 5 display-mode · 7 vsync y framerate-cap · 8 ui-scale
+        // Cada opción nueva agrega su constante acá y su fila en Build(), con el mismo id.
     }
 
     /// <summary>

@@ -23,8 +23,9 @@ namespace YeetTheMenu.Menus
         protected override Focusable InitialFocus => firstButton;
 
         private void OnHost() => Debug.Log("HOST GAME: fuera del alcance de la Fase 4.", this);
-        private void OnJoin() => Stack.Push("join");           // la pantalla existe desde 4b
-        private void OnSettings() => Stack.Push("settings");   // la pantalla existe desde 4c
+        // Los ids tienen que coincidir con el Id de cada MenuScreen de la escena.
+        private void OnJoin() => Stack.Push("join");
+        private void OnSettings() => Stack.Push("settings");
         private void OnCredits() => Stack.Push("credits");
 
         private void OnExit()

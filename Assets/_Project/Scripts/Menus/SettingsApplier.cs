@@ -58,7 +58,7 @@ namespace YeetTheMenu.Menus
             switch (id)
             {
                 case SettingIds.RetroFilter:
-                    if (retroFx != null) retroFx.ScreenEffectsIntensity = value / 100f;   // S17: el catálogo guarda %, el sistema 0–1
+                    if (retroFx != null) retroFx.ScreenEffectsIntensity = value / 100f;   // el catálogo guarda porcentaje; el controlador espera 0–1
                     return true;
 
                 default:

@@ -1,15 +1,16 @@
 /* settings.uss: pantalla Settings.
-   Las filas se construyen desde datos; su aspecto vive acá (A4).
-   Escala respecto del mock: ~1,5× (16 px del mock ≈ 24 px acá). */
+   Las filas se construyen desde datos; su aspecto vive acá.
+   Los tamaños son ~1,5× los del diseño original: 16 px de texto allá ≈ 24 px acá. */
 
-/* Contenedor de pestañas. Vacío hasta la etapa 6. */
+/* Contenedor de pestañas. Todavía vacío: el selector no está hecho. */
 .settings-tabs {
     flex-direction: row;
     justify-content: center;
     margin-top: 16px;
 }
 
-/* La lista: ancho del mock (40rem ≈ 960 px) y alto máximo del mock (46 %). U23 */
+/* La lista: 960 px de ancho y 46 % de la pantalla como alto máximo.
+   Sin verificar: si dentro de una pantalla centrada colapsa a 0, cambiar max-height por height. */
 .settings-rows {
     width: 960px;
     max-width: 88%;
@@ -24,7 +25,7 @@
     align-items: center;
     padding: 16px 0;
     border-bottom-width: 1px;
-    border-bottom-color: rgba(232, 217, 220, 0.13);   /* #e8d9dc22 del mock */
+    border-bottom-color: rgba(232, 217, 220, 0.13);   /* #e8d9dc22 */
 }
 
 .settings-row__label {
@@ -41,7 +42,8 @@
     margin-left: 48px;
 }
 
-/* Línea reservada (S19). Vacía hasta la etapa 6, pero ya ocupa su lugar: el layout no salta. */
+/* Línea reservada para describir la opción enfocada. Vacía todavía, pero ya ocupa su lugar:
+   así el layout no salta cuando aparece el texto. */
 .settings-desc {
     min-height: 30px;
     max-width: 900px;
@@ -53,7 +55,8 @@
     white-space: normal;
 }
 
-/* ── Slider ── Restilado modesto a propósito (U16). Verificar nombres con el UI Toolkit Debugger. */
+/* ── Slider ── Restilado modesto a propósito: los nombres de las partes internas son de Unity,
+   conviene confirmarlos con el UI Toolkit Debugger antes de depender de ellos. */
 
 .settings-slider {
     width: 320px;
@@ -70,8 +73,8 @@
     border-width: 0;
 }
 
-/* El número, de solo lectura (S36). Ocupa un ancho fijo para que el slider no se mueva
-   cuando el valor pasa de 9 a 10 o de 99 a 100. Es el .num del mock, sin ser un input. */
+/* El número, de solo lectura. Ancho fijo para que el slider no se mueva cuando el valor
+   pasa de 9 a 10 o de 99 a 100. */
 .settings-slider__value {
     width: 72px;
     margin-left: 16px;

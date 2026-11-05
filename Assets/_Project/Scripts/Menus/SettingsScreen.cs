@@ -14,13 +14,13 @@ namespace YeetTheMenu.Menus
         private const string SliderClass = "settings-slider";
         private const string ValueClass = "settings-slider__value";
 
-        [Tooltip("Dueño de los valores. El catálogo también se toma de acá, para que nunca discrepen (S30).")]
+        [Tooltip("Dueño de los valores. El catálogo también sale de acá, para que la vista y el dueño nunca miren catálogos distintos.")]
         [SerializeField] private GameSettings settings;
 
         [Tooltip("Plantilla de una fila: etiqueta + hueco para el control.")]
         [SerializeField] private VisualTreeAsset rowTemplate;
 
-        [Tooltip("Pestaña que se muestra. Provisorio: las pestañas llegan en la etapa 6.")]
+        [Tooltip("Pestaña que se muestra. Provisorio: todavía no hay selector de pestañas.")]
         [SerializeField] private string tabId = "graphics";
 
         private ScrollView rows;
@@ -41,10 +41,11 @@ namespace YeetTheMenu.Menus
 
         protected override void OnUnbind() => rows = null;
 
-        // S3: los cambios ya están en memoria; a disco se escriben acá, con la pantalla ya oculta.
+        // Los cambios ya están en memoria; a disco se escriben acá, una sola vez y con la pantalla
+        // ya oculta: guardar en cada movimiento de un slider produce parones perceptibles.
         protected override void OnHide()
         {
-            if (settings != null) settings.Save();   // no "settings?.Save()": ver errores típicos de la etapa 3
+            if (settings != null) settings.Save();   // no "settings?.Save()": en objetos de Unity, ?. saltea la comprobación de destruido
         }
 
         private void OnBackClicked() => Stack.Back();
@@ -53,7 +54,7 @@ namespace YeetTheMenu.Menus
 
         private void BuildTab(string id)
         {
-            rows.Clear();   // también se lleva la fila de muestra del UXML (S28)
+            rows.Clear();   // se lleva también la fila de muestra del UXML, que solo existe para diseñar
 
             if (settings.Catalog == null || !settings.Catalog.TryGetTab(id, out SettingsTab tab))
             {
@@ -63,7 +64,7 @@ namespace YeetTheMenu.Menus
 
             foreach (SettingOption option in tab.Options)
             {
-                if (option.Mode == SettingMode.Hidden) continue;   // S5: lo oculto ni se construye
+                if (option.Mode == SettingMode.Hidden) continue;   // lo oculto ni se construye: sin fila, sin foco y sin costo
 
                 TemplateContainer row = rowTemplate.Instantiate();
                 Label label = row.Q<Label>("row-label");
@@ -90,7 +91,7 @@ namespace YeetTheMenu.Menus
                     FillSlider(option, slot);
                     return true;
 
-                default:   // Toggle llega en la etapa 4; Choice, en la 5
+                default:   // Toggle y Choice todavía no tienen control
                     Debug.LogWarning($"SettingsScreen: '{option.Id}' es {option.Kind}, que todavía no tiene control.", this);
                     return false;
             }
@@ -116,7 +117,7 @@ namespace YeetTheMenu.Menus
             slider.RegisterValueChangedCallback(evt =>
             {
                 int stored = settings.SetValue(option.Id, evt.newValue);
-                if (stored != evt.newValue) slider.SetValueWithoutNotify(stored);   // el dueño corrigió: la vista obedece (S29)
+                if (stored != evt.newValue) slider.SetValueWithoutNotify(stored);   // el dueño corrigió el valor: la vista obedece
                 value.text = stored.ToString();
             });
 
