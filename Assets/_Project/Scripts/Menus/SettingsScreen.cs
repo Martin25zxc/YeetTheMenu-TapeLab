@@ -6,12 +6,13 @@ using YeetTheMenu.UI;
 namespace YeetTheMenu.Menus
 {
     /// <summary>
-    /// Vista de las preferencias. No guarda nada: lee y escribe a través de GameSettings (B2).
-    /// Qué filas hay lo dice el catálogo; cómo se ve una fila, SettingsRow.uxml (A3 + A4).
+    /// Vista de las preferencias. No guarda nada: lee y escribe a través de GameSettings.
+    /// Qué filas hay lo dice el catálogo; cómo se ve una fila, SettingsRow.uxml.
     /// </summary>
     public class SettingsScreen : MenuScreen
     {
         private const string SliderClass = "settings-slider";
+        private const string ValueClass = "settings-slider__value";
 
         [Tooltip("Dueño de los valores. El catálogo también se toma de acá, para que nunca discrepen (S30).")]
         [SerializeField] private GameSettings settings;
@@ -64,59 +65,63 @@ namespace YeetTheMenu.Menus
             {
                 if (option.Mode == SettingMode.Hidden) continue;   // S5: lo oculto ni se construye
 
-                VisualElement control = CreateControl(option);
-                if (control == null) continue;
+                TemplateContainer row = rowTemplate.Instantiate();
+                Label label = row.Q<Label>("row-label");
+                VisualElement slot = row.Q("row-control");
 
-                VisualElement row = CreateRow(option, control);
-                if (row != null) rows.Add(row);
+                if (label == null || slot == null)
+                {
+                    Debug.LogError("SettingsScreen: la plantilla de fila necesita 'row-label' y 'row-control'.", this);
+                    return;
+                }
+
+                label.text = option.Label;
+                if (!TryFillControl(option, slot)) continue;   // sin control, no se agrega la fila
+
+                rows.Add(row);
             }
         }
 
-        private VisualElement CreateRow(SettingOption option, VisualElement control)
-        {
-            TemplateContainer row = rowTemplate.Instantiate();
-            Label label = row.Q<Label>("row-label");
-            VisualElement slot = row.Q("row-control");
-
-            if (label == null || slot == null)
-            {
-                Debug.LogError("SettingsScreen: la plantilla de fila necesita 'row-label' y 'row-control'.", this);
-                return null;
-            }
-
-            label.text = option.Label;
-            slot.Add(control);
-            return row;
-        }
-
-        private VisualElement CreateControl(SettingOption option)
+        private bool TryFillControl(SettingOption option, VisualElement slot)
         {
             switch (option.Kind)
             {
                 case SettingKind.Slider:
-                    return CreateSlider(option);
+                    FillSlider(option, slot);
+                    return true;
 
                 default:   // Toggle llega en la etapa 4; Choice, en la 5
                     Debug.LogWarning($"SettingsScreen: '{option.Id}' es {option.Kind}, que todavía no tiene control.", this);
-                    return null;
+                    return false;
             }
         }
 
-        private SliderInt CreateSlider(SettingOption option)
+        /// <summary>
+        /// Slider + número de SOLO LECTURA. Nada de showInputField: un campo de texto en una fila
+        /// de Settings es una trampa de foco con mando, y obliga a una política para texto no numérico.
+        /// </summary>
+        private void FillSlider(SettingOption option, VisualElement slot)
         {
-            var slider = new SliderInt(option.Min, option.Max) { showInputField = true };
+            int current = ReadValue(option);
+
+            var slider = new SliderInt(option.Min, option.Max);
             slider.AddToClassList(SliderClass);
 
+            var value = new Label(current.ToString()) { pickingMode = PickingMode.Ignore };   // no roba foco ni clics
+            value.AddToClassList(ValueClass);
+
             // Pintar el estado SIN notificar: abrir la pantalla no es cambiar una preferencia.
-            slider.SetValueWithoutNotify(ReadValue(option));
+            slider.SetValueWithoutNotify(current);
 
             slider.RegisterValueChangedCallback(evt =>
             {
                 int stored = settings.SetValue(option.Id, evt.newValue);
                 if (stored != evt.newValue) slider.SetValueWithoutNotify(stored);   // el dueño corrigió: la vista obedece (S29)
+                value.text = stored.ToString();
             });
 
-            return slider;
+            slot.Add(slider);
+            slot.Add(value);
         }
 
         private int ReadValue(SettingOption option) =>

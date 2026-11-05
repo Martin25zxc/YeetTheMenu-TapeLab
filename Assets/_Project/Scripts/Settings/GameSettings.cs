@@ -6,10 +6,10 @@ namespace YeetTheMenu.Settings
 {
     /// <summary>
     /// Dueño de las preferencias del jugador: valores actuales, validación, persistencia y aviso de cambios.
-    /// No sabe qué significa ningún valor (S14): aplicarlos es trabajo de quien escuche Changed.
-    /// Uno por escena, no singleton (S18): el almacén de verdad es PlayerPrefs; esto es su caché validada.
+    /// No sabe qué significa ningún valor: aplicarlos es trabajo de quien escuche Changed.
+    /// Uno por escena, no singleton: el almacén de verdad es PlayerPrefs; esto es su caché validada.
     /// Guarda el valor de toda opción que tiene fila (Available y Demo): si se ve y se mueve, se recuerda,
-    /// aunque Demo no lo aplique a ningún sistema (S1). Solo Hidden queda sin valor, porque ni se construye.
+    /// aunque Demo no lo aplique a ningún sistema. Solo Hidden queda sin valor, porque ni se construye.
     /// </summary>
     [DisallowMultipleComponent]
     public class GameSettings : MonoBehaviour
@@ -18,6 +18,9 @@ namespace YeetTheMenu.Settings
 
         [Tooltip("Qué opciones existen en este proyecto.")]
         [SerializeField] private SettingsCatalog catalog;
+
+        [Tooltip("Registra cada cambio de valor. Igual que logTransitions del stack: se apaga al cerrar la fase.")]
+        [SerializeField] private bool logChanges;
 
         private readonly Dictionary<string, SettingOption> tracked = new();
         private readonly Dictionary<string, int> values = new();
@@ -44,7 +47,7 @@ namespace YeetTheMenu.Settings
 
         private void Awake() => EnsureLoaded();
 
-        // Red de seguridad: salir del juego o de la escena guarda lo pendiente (S3).
+        // Red de seguridad: salir del juego o de la escena guarda lo pendiente.
         private void OnApplicationQuit() => Save();
         private void OnDestroy() => Save();
 
@@ -56,7 +59,7 @@ namespace YeetTheMenu.Settings
 
         /// <summary>
         /// Pide un valor nuevo. Devuelve el que quedó, que puede diferir si el pedido estaba
-        /// fuera de rango: el dueño del valor tiene la última palabra (S29).
+        /// fuera de rango: el dueño del valor tiene la última palabra.
         /// </summary>
         public int SetValue(string id, int value)
         {
@@ -73,6 +76,7 @@ namespace YeetTheMenu.Settings
 
             values[id] = valid;
             dirty = true;
+            if (logChanges) Debug.Log($"GameSettings: {id} = {valid}", this);
             Changed?.Invoke(id, valid);
             return valid;
         }
@@ -87,6 +91,7 @@ namespace YeetTheMenu.Settings
 
             PlayerPrefs.Save();   // lo caro: en momentos definidos, nunca mientras se arrastra un slider
             dirty = false;
+            if (logChanges) Debug.Log("GameSettings: guardado en disco.", this);
         }
 
         // Carga perezosa: funciona aunque alguien pregunte antes de que corra este Awake.

@@ -1,44 +1,46 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace YeetTheMenu.Settings
 {
     /// <summary>Una pestaña de Settings y sus opciones, en el orden en que se muestran.</summary>
-    [Serializable]
-    public class SettingsTab
+    public sealed class SettingsTab
     {
-        [Tooltip("Identificador estable (por ejemplo: graphics).")]
-        [SerializeField] private string id;
+        public string Id { get; }
+        public string Label { get; }
+        public IReadOnlyList<SettingOption> Options { get; }   // de solo lectura hacia afuera (S13)
 
-        [Tooltip("Texto de la pestaña.")]
-        [SerializeField] private string label;
-
-        [SerializeField] private List<SettingOption> options = new();
-
-        public string Id => id;
-        public string Label => label;
-        public IReadOnlyList<SettingOption> Options => options;   // de solo lectura hacia afuera (S13)
+        public SettingsTab(string id, string label, IReadOnlyList<SettingOption> options)
+        {
+            Id = id;
+            Label = label;
+            Options = options ?? System.Array.Empty<SettingOption>();
+        }
     }
 
     /// <summary>
     /// Qué opciones existen en este proyecto, agrupadas en pestañas.
-    /// Es un asset de diseño: ningún script lo escribe en ejecución (S13).
-    /// Otro proyecto usa el mismo código con su propio catálogo: eso es lo "adaptable" (S31).
+    /// Es el punto de enganche: la escena apunta a un asset, pero el contenido lo escribe
+    /// una subclase en código, donde se ve entero, se diffea y un id mal escrito no compila.
+    /// Otro proyecto usa el mismo código con su propia subclase: eso es lo "adaptable" (S31).
+    /// Ningún script lo escribe en ejecución.
     /// </summary>
-    [CreateAssetMenu(menuName = "TapeLab/Settings Catalog", fileName = "SC_New")]
-    public class SettingsCatalog : ScriptableObject
+    public abstract class SettingsCatalog : ScriptableObject
     {
-        [SerializeField] private List<SettingsTab> tabs = new();
+        private IReadOnlyList<SettingsTab> tabs;
 
-        public IReadOnlyList<SettingsTab> Tabs => tabs;
+        /// <summary>Se construye una vez y se reusa. Cambia solo al recompilar, porque es código.</summary>
+        public IReadOnlyList<SettingsTab> Tabs => tabs ??= Validate(Build());
+
+        /// <summary>Acá se escribe el catálogo. Ver TapeLabCatalog.</summary>
+        protected abstract IReadOnlyList<SettingsTab> Build();
 
         /// <summary>Todas las opciones de todas las pestañas, en orden.</summary>
         public IEnumerable<SettingOption> AllOptions
         {
             get
             {
-                foreach (SettingsTab tab in tabs)
+                foreach (SettingsTab tab in Tabs)
                     foreach (SettingOption option in tab.Options)
                         yield return option;
             }
@@ -46,7 +48,7 @@ namespace YeetTheMenu.Settings
 
         public bool TryGetTab(string tabId, out SettingsTab tab)
         {
-            foreach (SettingsTab candidate in tabs)
+            foreach (SettingsTab candidate in Tabs)
             {
                 if (candidate.Id == tabId)
                 {
@@ -59,28 +61,44 @@ namespace YeetTheMenu.Settings
             return false;
         }
 
-        // Unity solo llama OnValidate en el Editor, al cargar o editar el asset.
-        private void OnValidate()
+        // ── Ayudas para escribir un catálogo legible ──
+        // Están acá, en la base, para que cualquier catálogo las tenga sin repetirlas.
+
+        protected static SettingsTab Tab(string id, string label, params SettingOption[] options) =>
+            new(id, label, options);
+
+        protected static SettingOption Slider(string id, string label, int min, int max, int defaultValue,
+                                              string description, SettingMode mode = SettingMode.Available) =>
+            new(id, label, SettingKind.Slider, mode, min, max, defaultValue, description);
+
+        protected static SettingOption Toggle(string id, string label, bool on,
+                                              string description, SettingMode mode = SettingMode.Available) =>
+            new(id, label, SettingKind.Toggle, mode, 0, 1, on ? 1 : 0, description);
+
+        protected static SettingOption Choice(string id, string label, string[] choices, int defaultIndex,
+                                              string description, SettingMode mode = SettingMode.Available) =>
+            new(id, label, SettingKind.Choice, mode, 0, 0, defaultIndex, description, choices);
+
+        // El id es la clave de guardado: dos opciones con el mismo id se pisarían.
+        // Esta comprobación reemplaza al OnValidate del asset.
+        private IReadOnlyList<SettingsTab> Validate(IReadOnlyList<SettingsTab> built)
         {
             var tabIds = new HashSet<string>();
             var optionIds = new HashSet<string>();
 
-            foreach (SettingsTab tab in tabs)
+            foreach (SettingsTab tab in built)
             {
                 if (string.IsNullOrWhiteSpace(tab.Id) || !tabIds.Add(tab.Id))
-                    Debug.LogWarning($"{name}: la pestaña '{tab.Label}' no tiene id o lo repite.", this);
+                    Debug.LogError($"{name}: la pestaña '{tab.Label}' no tiene id o lo repite.", this);
 
                 foreach (SettingOption option in tab.Options)
                 {
-                    string problem = option.Validate();
-                    if (problem != null)
-                        Debug.LogWarning($"{name}: la opción '{option.Id}' ({tab.Id}) {problem}.", this);
-
-                    // El id es la clave de guardado: dos opciones con el mismo id se pisarían.
                     if (!string.IsNullOrWhiteSpace(option.Id) && !optionIds.Add(option.Id))
-                        Debug.LogWarning($"{name}: id repetido '{option.Id}'. Tiene que ser único.", this);
+                        Debug.LogError($"{name}: id repetido '{option.Id}'. Tiene que ser único.", this);
                 }
             }
+
+            return built;
         }
     }
 }

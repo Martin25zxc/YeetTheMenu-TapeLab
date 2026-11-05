@@ -70,18 +70,11 @@
     border-width: 0;
 }
 
-/* El campo numérico de showInputField, como el .num del mock: transparente, con línea inferior. */
-.settings-slider .unity-base-slider__text-field {
+/* El número, de solo lectura (S36). Ocupa un ancho fijo para que el slider no se mueva
+   cuando el valor pasa de 9 a 10 o de 99 a 100. Es el .num del mock, sin ser un input. */
+.settings-slider__value {
     width: 72px;
     margin-left: 16px;
-}
-
-.settings-slider .unity-base-text-field__input {
-    background-color: rgba(0, 0, 0, 0);
-    border-width: 0;
-    border-bottom-width: 1px;
-    border-bottom-color: var(--color-fg);
-    border-radius: 0;
     font-size: 22px;
     color: var(--color-fg);
     -unity-text-align: middle-right;

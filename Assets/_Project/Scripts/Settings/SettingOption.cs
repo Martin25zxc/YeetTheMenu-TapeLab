@@ -16,75 +16,82 @@ namespace YeetTheMenu.Settings
     public enum SettingMode
     {
         Available,   // se aplica y se guarda
-        Demo,        // se muestra y se mueve, pero no aplica ni se guarda
+        Demo,        // se muestra, se mueve y se guarda, pero no se aplica a ningún sistema
         Hidden       // no se dibuja: queda como documentación del juego terminado
     }
 
     /// <summary>
     /// Descripción de UNA opción: qué es, cómo se controla y qué valores admite.
-    /// Todos los valores son enteros (S17, S27): un slider guarda el número que muestra,
+    /// Inmutable y construida en código, no en el Inspector: el id, el tipo y el rango son
+    /// contrato con el aplicador, no datos de diseño. El catálogo las agrupa en pestañas.
+    /// Todos los valores son enteros: un slider guarda el número que muestra,
     /// un toggle guarda 0 o 1, un choice guarda el índice de la alternativa elegida.
-    /// Es dato de diseño: nunca guarda el valor actual del jugador (S13).
+    /// Es dato de diseño: nunca guarda el valor actual del jugador.
     /// </summary>
-    [Serializable]
-    public class SettingOption
+    public sealed class SettingOption
     {
-        [Tooltip("Clave estable de guardado y de aplicación. Cambiarla hace perder lo que el jugador guardó.")]
-        [SerializeField] private string id;
+        private static readonly string[] NoChoices = Array.Empty<string>();
 
-        [Tooltip("Texto de la fila.")]
-        [SerializeField] private string label;
+        /// <summary>Clave estable de guardado y de aplicación. Cambiarla pierde lo que el jugador guardó.</summary>
+        public string Id { get; }
 
-        [Tooltip("Qué hace la opción. Se mostrará en la línea de descripción.")]
-        [SerializeField, TextArea(1, 3)] private string description;
+        public string Label { get; }
 
-        [SerializeField] private SettingKind kind;
-        [SerializeField] private SettingMode mode;
+        /// <summary>Qué hace la opción. Lo muestra la línea de descripción.</summary>
+        public string Description { get; }
 
-        [Tooltip("Solo Slider: valor mínimo.")]
-        [SerializeField] private int min;
+        public SettingKind Kind { get; }
+        public SettingMode Mode { get; }
 
-        [Tooltip("Solo Slider: valor máximo.")]
-        [SerializeField] private int max = 100;
+        public int Min { get; }
+        public int Max { get; }
+        public int DefaultValue { get; }
 
-        [Tooltip("Slider: el número. Toggle: 0 o 1. Choice: el índice en Choices.")]
-        [SerializeField] private int defaultValue;
+        /// <summary>Solo Choice: nombres legibles, en orden.</summary>
+        public IReadOnlyList<string> Choices { get; }
 
-        [Tooltip("Solo Choice: nombres legibles, en orden.")]
-        [SerializeField] private string[] choices;
-
-        public string Id => id;
-        public string Label => label;
-        public string Description => description;
-        public SettingKind Kind => kind;
-        public SettingMode Mode => mode;
-
-        public int Min => kind == SettingKind.Slider ? min : 0;
-
-        public int Max => kind switch
+        public SettingOption(string id, string label, SettingKind kind, SettingMode mode,
+                             int min, int max, int defaultValue, string description, string[] choices = null)
         {
-            SettingKind.Slider => max,
-            SettingKind.Toggle => 1,
-            SettingKind.Choice => Mathf.Max(0, Choices.Count - 1),
-            _ => 0
-        };
+            Id = id;
+            Label = label;
+            Description = description ?? string.Empty;
+            Kind = kind;
+            Mode = mode;
+            Choices = choices ?? NoChoices;
 
-        public int DefaultValue => Clamp(defaultValue);
+            // El rango no se pide dos veces: cada tipo sabe el suyo.
+            switch (kind)
+            {
+                case SettingKind.Toggle:
+                    Min = 0;
+                    Max = 1;
+                    break;
+                case SettingKind.Choice:
+                    Min = 0;
+                    Max = Mathf.Max(0, Choices.Count - 1);
+                    break;
+                default:
+                    Min = Mathf.Min(min, max);
+                    Max = Mathf.Max(min, max);
+                    break;
+            }
 
-        public IReadOnlyList<string> Choices => choices ?? Array.Empty<string>();
+            DefaultValue = Clamp(defaultValue);
+
+            // Un catálogo en código no se puede validar al compilar; esto es lo más temprano posible.
+            // Antes esta red la tendía OnValidate sobre el asset.
+            if (string.IsNullOrWhiteSpace(Id))
+                Debug.LogError($"SettingOption '{label}': sin id. Es la clave de guardado y de aplicación.");
+
+            if (kind == SettingKind.Choice && Choices.Count == 0)
+                Debug.LogError($"SettingOption '{id}': es Choice y no tiene alternativas.");
+
+            if (DefaultValue != defaultValue)
+                Debug.LogWarning($"SettingOption '{id}': el default {defaultValue} está fuera de {Min}–{Max}; se usa {DefaultValue}.");
+        }
 
         /// <summary>Lleva cualquier entero al rango válido de esta opción.</summary>
         public int Clamp(int value) => Mathf.Clamp(value, Min, Max);
-
-        /// <summary>Describe el problema de configuración, o devuelve null si está bien.</summary>
-        internal string Validate()
-        {
-            if (string.IsNullOrWhiteSpace(id)) return "no tiene id";
-            if (kind == SettingKind.Slider && min > max) return $"tiene min ({min}) mayor que max ({max})";
-            if (kind == SettingKind.Choice && Choices.Count == 0) return "es Choice y no tiene alternativas";
-            if (defaultValue != Clamp(defaultValue))
-                return $"tiene el default {defaultValue} fuera de {Min}–{Max}; se usará {Clamp(defaultValue)}";
-            return null;
-        }
     }
 }

@@ -931,7 +931,6 @@ GameObject:
   - component: {fileID: 1838113431}
   - component: {fileID: 1838113434}
   - component: {fileID: 1838113433}
-  - component: {fileID: 1838113432}
   m_Layer: 0
   m_Name: GameSettings
   m_TagString: Untagged
@@ -954,21 +953,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1752336497}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1838113432
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1838113430}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 70ebe0a84c4074b4187b975c30156b7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Lab.SettingsProbe
-  settings: {fileID: 1838113434}
-  id: retro-filter
-  value: 30
 --- !u!114 &1838113433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -996,6 +980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Settings.GameSettings
   catalog: {fileID: 11400000, guid: 73f99ce5eea216e4aa5bf8c50ee7d079, type: 2}
+  logChanges: 0
 --- !u!1 &1879541249
 GameObject:
   m_ObjectHideFlags: 0

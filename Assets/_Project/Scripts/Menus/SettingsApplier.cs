@@ -6,15 +6,13 @@ namespace YeetTheMenu.Menus
 {
     /// <summary>
     /// Traduce preferencias a los sistemas de ESTE proyecto. GameSettings no sabe qué significa
-    /// "retro-filter"; este componente sí (S14). Es la pieza que cambia al migrar.
-    /// Referencias opcionales: si falta un sistema, sus opciones se omiten (S15).
+    /// "retro-filter"; este componente sí. Es la pieza que cambia al migrar.
+    /// Referencias opcionales: si falta un sistema, sus opciones se omiten.
+    /// Los ids los toma de SettingIds, la misma constante que usa el catálogo.
     /// </summary>
     [DisallowMultipleComponent]
     public class SettingsApplier : MonoBehaviour
     {
-        // Vocabulario del aplicador: los mismos ids que el catálogo.
-        private const string RetroFilter = "retro-filter";
-
         [SerializeField] private GameSettings settings;
 
         [Tooltip("Opcional. Sin él, Retro filter no se aplica.")]
@@ -59,7 +57,7 @@ namespace YeetTheMenu.Menus
         {
             switch (id)
             {
-                case RetroFilter:
+                case SettingIds.RetroFilter:
                     if (retroFx != null) retroFx.ScreenEffectsIntensity = value / 100f;   // S17: el catálogo guarda %, el sistema 0–1
                     return true;
 
