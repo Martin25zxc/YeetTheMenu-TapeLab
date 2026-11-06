@@ -24,6 +24,8 @@ namespace YeetTheMenu.Menus
         private const string SliderValueClass = "settings-slider__value";
         private const string ToggleClass = "settings-toggle";
         private const string ChoiceClass = "settings-choice";
+        private const string SliderFillClass = "settings-slider__fill";
+        private const string SliderTrackerClass = "unity-base-slider__tracker";
 
         [Tooltip("Dueño de los valores. El catálogo también sale de acá, para que la vista y el dueño nunca miren catálogos distintos.")]
         [SerializeField] private GameSettings settings;
@@ -43,6 +45,8 @@ namespace YeetTheMenu.Menus
         private ScrollView rows;
         private Label description;
         private Button resetButton;
+        private Button backButton;
+        private VisualElement navRoot;   // donde está registrada la navegación, para poder soltarla
 
         private VisualElement focusedRow;
         private SettingOption focusedOption;   // la fila que tiene el foco
@@ -50,7 +54,7 @@ namespace YeetTheMenu.Menus
 
         protected override void OnBuild(VisualElement root)
         {
-            BindClick(root, "btn-back", OnBackClicked);
+            backButton = BindClick(root, "btn-back", OnBackClicked);
             resetButton = BindClick(root, "btn-reset", OnResetClicked);
 
             tabsBar = root.Q("settings-tabs");
@@ -73,6 +77,11 @@ namespace YeetTheMenu.Menus
             rows.RegisterCallback<FocusInEvent>(OnRowFocusIn);
             rows.RegisterCallback<FocusOutEvent>(OnRowFocusOut);
 
+            // TrickleDown: se decide antes de que un control consuma la flecha, y antes de que Unity
+            // elija el siguiente foco por posición en pantalla.
+            navRoot = root;
+            navRoot.RegisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
+
             BuildTabs();
             ShowTab(ResolveTabId());
         }
@@ -85,10 +94,14 @@ namespace YeetTheMenu.Menus
                 rows.UnregisterCallback<FocusOutEvent>(OnRowFocusOut);
             }
 
+            navRoot?.UnregisterCallback<NavigationMoveEvent>(OnNavigationMove, TrickleDown.TrickleDown);
+            navRoot = null;
+
             tabsBar = null;
             rows = null;
             description = null;
             resetButton = null;
+            backButton = null;
 
             // Punteros a elementos que ya no existen. La pestaña activa NO se borra: es lo único
             // que tiene que sobrevivir para que la vista se repinte igual.
@@ -270,14 +283,36 @@ namespace YeetTheMenu.Menus
             var value = new Label(current.ToString()) { pickingMode = PickingMode.Ignore };   // no roba foco ni clics
             value.AddToClassList(SliderValueClass);
 
+            // Unity pinta la pista de un solo color y no tiene "parte llena". El relleno es un
+            // hijo de la pista cuyo ancho es el porcentaje del valor; no recibe puntero, así que
+            // arrastrar y clicar la pista funcionan igual que antes.
+            VisualElement tracker = slider.Q(className: SliderTrackerClass);
+            VisualElement fill = null;
+            if (tracker != null)
+            {
+                fill = new VisualElement { pickingMode = PickingMode.Ignore };
+                fill.AddToClassList(SliderFillClass);
+                tracker.Add(fill);
+            }
+
+            void PaintFill(int shown)
+            {
+                if (fill == null) return;
+                float span = option.Max - option.Min;
+                float percent = span > 0f ? 100f * (shown - option.Min) / span : 0f;
+                fill.style.width = Length.Percent(Mathf.Clamp(percent, 0f, 100f));
+            }
+
             // Pintar el estado SIN notificar: abrir la pantalla no es cambiar una preferencia.
             slider.SetValueWithoutNotify(current);
+            PaintFill(current);
 
             slider.RegisterValueChangedCallback(evt =>
             {
                 int stored = settings.SetValue(option.Id, evt.newValue);
                 if (stored != evt.newValue) slider.SetValueWithoutNotify(stored);   // el dueño corrigió el valor: la vista obedece
                 value.text = stored.ToString();
+                PaintFill(stored);
             });
 
             slot.Add(slider);
@@ -412,6 +447,125 @@ namespace YeetTheMenu.Menus
                 element = element.parent;
             }
 
+            return null;
+        }
+
+        // ── Navegación con flechas y D-pad ──
+
+        /// <summary>
+        /// Arriba y Abajo recorren una sola columna en orden fijo: pestañas, filas, Restablecer,
+        /// Volver. Izquierda y Derecha mueven entre pestañas y entre los dos botones de abajo.
+        /// Sin esto Unity elige el siguiente foco por posición en pantalla, y con controles de
+        /// distinto ancho y botones en las esquinas saltea filas o deja el foco sin salida.
+        /// Tab no pasa por acá: sigue el orden del árbol, que ya es el correcto.
+        /// </summary>
+        private void OnNavigationMove(NavigationMoveEvent evt)
+        {
+            if (rows == null) return;
+            if (rows.focusController?.focusedElement is not VisualElement current) return;
+            if (!TryNavigate(current, evt.direction, out VisualElement target)) return;
+
+            evt.StopPropagation();
+            rows.focusController.IgnoreEvent(evt);   // sin esto Unity mueve el foco por su cuenta además
+            target?.Focus();                         // null = la pulsación se absorbe y el foco no cambia
+        }
+
+        /// <summary>true = la pantalla resolvió la flecha (con target null si no hay adónde ir).</summary>
+        private bool TryNavigate(VisualElement current, NavigationMoveEvent.Direction direction, out VisualElement target)
+        {
+            target = null;
+
+            bool horizontal = direction is NavigationMoveEvent.Direction.Left or NavigationMoveEvent.Direction.Right;
+            bool vertical = direction is NavigationMoveEvent.Direction.Up or NavigationMoveEvent.Direction.Down;
+            if (!horizontal && !vertical) return false;
+
+            int step = direction is NavigationMoveEvent.Direction.Down or NavigationMoveEvent.Direction.Right ? 1 : -1;
+
+            if (tabsBar.Contains(current))
+            {
+                if (horizontal) target = Neighbour(new List<VisualElement>(tabsBar.Children()), current, step);
+                else if (step > 0) target = FirstRowControl();
+                return true;
+            }
+
+            if (rows.Contains(current))
+            {
+                // El slider usa izquierda y derecha para cambiar su valor. Para el resto de los
+                // controles esas flechas no significan nada en una columna: se absorben.
+                if (horizontal) return !IsInsideSlider(current);
+
+                List<VisualElement> controls = RowControls();
+                int index = IndexOfControl(controls, current);
+
+                if (index < 0) target = controls.Count == 0 ? null : controls[step > 0 ? 0 : controls.Count - 1];
+                else if (index + step < 0) target = ActiveTabButton();
+                else if (index + step >= controls.Count) target = resetButton;
+                else target = controls[index + step];
+                return true;
+            }
+
+            if (current == resetButton || current == backButton)
+            {
+                if (vertical && step < 0) target = LastRowControl() ?? ActiveTabButton();
+                else if (horizontal && current == backButton && step > 0) target = resetButton;
+                else if (horizontal && current == resetButton && step < 0) target = backButton;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsInsideSlider(VisualElement element) =>
+            element is SliderInt || element.GetFirstAncestorOfType<SliderInt>() != null;
+
+        private static VisualElement Neighbour(List<VisualElement> items, VisualElement current, int step)
+        {
+            int index = IndexOfControl(items, current);
+            int next = index + step;
+            return index >= 0 && next >= 0 && next < items.Count ? items[next] : null;
+        }
+
+        // El control puede ser el propio elemento enfocado o un ancestro suyo (el foco cae a veces
+        // en una parte interna del slider).
+        private static int IndexOfControl(List<VisualElement> controls, VisualElement current)
+        {
+            for (int i = 0; i < controls.Count; i++)
+                if (controls[i] == current || controls[i].Contains(current)) return i;
+            return -1;
+        }
+
+        // Un control por fila: el primer descendiente que acepta foco.
+        private List<VisualElement> RowControls()
+        {
+            var controls = new List<VisualElement>();
+
+            foreach (VisualElement row in rows.contentContainer.Children())
+            {
+                if (row.userData is not SettingOption) continue;
+
+                VisualElement control = row.Query<VisualElement>().Where(e => e.focusable && e.canGrabFocus).First();
+                if (control != null) controls.Add(control);
+            }
+
+            return controls;
+        }
+
+        private VisualElement FirstRowControl()
+        {
+            List<VisualElement> controls = RowControls();
+            return controls.Count > 0 ? controls[0] : null;
+        }
+
+        private VisualElement LastRowControl()
+        {
+            List<VisualElement> controls = RowControls();
+            return controls.Count > 0 ? controls[controls.Count - 1] : null;
+        }
+
+        private VisualElement ActiveTabButton()
+        {
+            foreach (VisualElement button in tabsBar.Children())
+                if ((button.userData as string) == activeTabId) return button;
             return null;
         }
 

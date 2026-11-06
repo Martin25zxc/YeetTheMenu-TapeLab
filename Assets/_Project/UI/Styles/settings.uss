@@ -174,8 +174,19 @@
     border-width: 0;
 }
 
-.settings-slider .unity-base-slider__dragger {
+/* Parte llena de la pista: un hijo que agrega el código, con ancho en %. Va pegado a la
+   izquierda y no recibe puntero. */
+.settings-slider__fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
     background-color: var(--color-accent);
+}
+
+/* El deslizador en el color del texto, para que se distinga del relleno que lo precede. */
+.settings-slider .unity-base-slider__dragger {
+    background-color: var(--color-fg);
     border-width: 0;
 }
 

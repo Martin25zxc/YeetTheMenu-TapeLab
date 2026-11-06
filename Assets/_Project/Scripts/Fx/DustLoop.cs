@@ -84,6 +84,7 @@ namespace YeetTheMenu.Fx
 
             ps.Clear();
             ps.Play();
+            Simulate(0f);   // reparte las partículas en x aun si el movimiento está detenido
             ps.SetParticles(particles, particles.Length);
         }
 
