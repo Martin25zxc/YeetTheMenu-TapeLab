@@ -1,0 +1,19 @@
+{
+    "name": "YeetTheMenu.Menus",
+    "rootNamespace": "YeetTheMenu.Menus",
+    "references": [
+        "YeetTheMenu.UI",
+        "YeetTheMenu.Settings",
+        "YeetTheMenu.Online",
+        "YeetTheMenu.Fx"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using YeetTheMenu.Settings;
 using UnityEngine;
 
-namespace YeetTheMenu.Settings
+namespace YeetTheMenu.Menus
 {
     /// <summary>
     /// Lo que el catálogo y el aplicador tienen que compartir: nada más.

@@ -466,7 +466,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 17.771738, y: 10, z: 1}
+  m_LocalScale: {x: 17.777779, y: 10, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -705,7 +705,7 @@ MonoBehaviour:
   backdrop: 0
   settings: {fileID: 1838113434}
   rowTemplate: {fileID: 9197481963319205126, guid: d96179649ce06b345b92f311df01be8a, type: 3}
-  tabId: graphics
+  choicePopupStyleSheet: {fileID: 7433441132597879392, guid: 4a496bcf355892744a371a57535bce55, type: 3}
 --- !u!1 &1297983985
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,6 +967,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::YeetTheMenu.Menus.SettingsApplier
   settings: {fileID: 1838113434}
   retroFx: {fileID: 1297983988}
+  stack: {fileID: 650482877}
 --- !u!114 &1838113434
 MonoBehaviour:
   m_ObjectHideFlags: 0

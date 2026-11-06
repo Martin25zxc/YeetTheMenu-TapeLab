@@ -16,10 +16,10 @@ namespace YeetTheMenu.Fx
         private static readonly int FogIntensityId = Shader.PropertyToID("_FogIntensity");
         private static RetroFxController active;
 
-        [Header("Perfil del contexto actual")]
+        [Header("Perfil de efectos (valores de diseño)")]
         [SerializeField] private RetroFxProfile profile;
 
-        [Header("Preferencias del jugador (las alimentará Settings)")]
+        [Header("Preferencias del jugador (las escribe SettingsApplier)")]
         [Tooltip("Multiplica solo los efectos de pantalla: scanlines, roll y grano.")]
         [SerializeField, Range(0f, 1f)] private float screenEffectsIntensity = 1f;
         [SerializeField] private bool reducedEffects;
@@ -31,22 +31,18 @@ namespace YeetTheMenu.Fx
         private RetroFxState effective = RetroFxState.Full;   // sin [SerializeField]: no ensucia la escena
         private float retroTime;
 
-        public RetroFxProfile Profile => profile;
-
         public float ScreenEffectsIntensity
         {
             get => screenEffectsIntensity;
             set => screenEffectsIntensity = Mathf.Clamp01(value);
         }
 
+        /// <summary>Detiene el movimiento de todos los efectos. Lo escribe quien traduce las preferencias del jugador.</summary>
         public bool ReducedEffects
         {
             get => reducedEffects;
             set => reducedEffects = value;
         }
-
-        /// <summary>Punto de entrada para cambiar de contexto (menú, pausa, gameplay).</summary>
-        public void SetProfile(RetroFxProfile newProfile) => profile = newProfile;
 
         private void OnEnable()
         {
@@ -99,8 +95,7 @@ namespace YeetTheMenu.Fx
             next.scanlines *= user;
             next.roll *= user;
             next.grain *= user;
-            next.glitch *= user; 
-
+            next.glitch *= user;
 
             if (reducedEffects)
                 next.motion = 0f;
