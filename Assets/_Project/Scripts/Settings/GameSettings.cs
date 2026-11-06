@@ -19,7 +19,7 @@ namespace YeetTheMenu.Settings
         [Tooltip("Qué opciones existen en este proyecto.")]
         [SerializeField] private SettingsCatalog catalog;
 
-        [Tooltip("Registra cada cambio de valor. Igual que logTransitions del stack: se apaga al cerrar la fase.")]
+        [Tooltip("Registra cada cambio de valor. Igual que logTransitions del stack.")]
         [SerializeField] private bool logChanges;
 
         private readonly Dictionary<string, SettingOption> tracked = new();
