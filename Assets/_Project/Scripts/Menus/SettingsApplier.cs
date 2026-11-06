@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using YeetTheMenu.Fx;
 using YeetTheMenu.Settings;
 using YeetTheMenu.UI;
@@ -16,6 +17,15 @@ namespace YeetTheMenu.Menus
     [DisallowMultipleComponent]
     public class SettingsApplier : MonoBehaviour
     {
+        // Los nombres de los parámetros expuestos del mixer. Son un acoplamiento puntual y con
+        // nombre, igual que Screen.fullScreenMode: al integrar el menú a un juego, acá se cambian
+        // por los del mixer de ese juego y no hay que tocar nada más.
+        private const string MasterVolumeParameter = "MasterVolume";
+        private const string UiVolumeParameter = "UiVolume";
+
+        // Mínimo del AudioMixer: por debajo de esto no hay nada que oír.
+        private const float SilenceDecibels = -80f;
+
         [SerializeField] private GameSettings settings;
 
         [Tooltip("Opcional. Sin él no se aplican Retro filter ni Reduced effects.")]
@@ -23,6 +33,9 @@ namespace YeetTheMenu.Menus
 
         [Tooltip("Opcional. Sin él, Reduced effects no acorta las transiciones del menú.")]
         [SerializeField] private ScreenStack stack;
+
+        [Tooltip("Opcional. Sin él no se aplican Master volume ni UI volume.")]
+        [SerializeField] private AudioMixer audioMixer;
 
         private void OnEnable()
         {
@@ -34,7 +47,8 @@ namespace YeetTheMenu.Menus
             if (settings != null) settings.Changed -= Apply;
         }
 
-        // Start, no Awake: para entonces ya corrieron todos los Awake de la escena.
+        // Start, no Awake: para entonces ya corrieron todos los Awake de la escena. Además,
+        // AudioMixer.SetFloat sobre un parámetro expuesto no surte efecto si se llama en Awake.
         private void Start()
         {
             if (settings == null)
@@ -46,6 +60,8 @@ namespace YeetTheMenu.Menus
                 Debug.LogWarning("SettingsApplier: sin RetroFxController no se aplican Retro filter ni Reduced effects.", this);
             if (stack == null)
                 Debug.LogWarning("SettingsApplier: sin ScreenStack, Reduced effects no acorta las transiciones.", this);
+            if (audioMixer == null)
+                Debug.LogWarning("SettingsApplier: sin AudioMixer no se aplican los volúmenes.", this);
 
             // Changed no se dispara al cargar, así que el estado inicial se aplica una vez, acá.
             // Solo las aplicables: las demostrativas se guardan en GameSettings, pero no llegan
@@ -87,6 +103,14 @@ namespace YeetTheMenu.Menus
                     ApplyReducedEffects(value != 0);
                     return true;
 
+                case SettingIds.MasterVolume:
+                    SetMixerVolume(MasterVolumeParameter, value);
+                    return true;
+
+                case SettingIds.UiVolume:
+                    SetMixerVolume(UiVolumeParameter, value);
+                    return true;
+
                 default:
                     return false;
             }
@@ -108,6 +132,28 @@ namespace YeetTheMenu.Menus
 
             // Transiciones sin escala y más cortas: molesta el movimiento, no el cambio.
             if (stack != null) stack.ReducedMotion = on;
+        }
+
+        /// <summary>
+        /// El catálogo guarda 0–100 lineal; el mixer trabaja en decibelios.
+        ///
+        /// 20·log10(v/100) es la conversión que reproduce el mock, que multiplica ganancias
+        /// lineales. Con 100 da 0 dB, con 50 da −6 dB. Eso se oye "más bajo", no "la mitad":
+        /// es correcto, y está dicho acá para que nadie lo tome por un defecto más adelante.
+        ///
+        /// El nivel propio del sonido de interfaz NO vive acá sino en el volumen del AudioSource,
+        /// justamente para que estos dos parámetros queden libres para el jugador.
+        /// </summary>
+        private void SetMixerVolume(string parameter, int value)
+        {
+            if (audioMixer == null) return;
+
+            float decibels = value <= 0 ? SilenceDecibels : 20f * Mathf.Log10(value / 100f);
+
+            // SetFloat devuelve false si el parámetro no está expuesto: el nombre es un contrato
+            // por cadena de texto, así que conviene que un error de tipeo se note enseguida.
+            if (!audioMixer.SetFloat(parameter, decibels))
+                Debug.LogWarning($"SettingsApplier: el mixer no tiene expuesto '{parameter}'.", this);
         }
 
         /// <summary>

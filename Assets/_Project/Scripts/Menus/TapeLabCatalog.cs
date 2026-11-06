@@ -19,6 +19,11 @@ namespace YeetTheMenu.Menus
         public const string VSync = "vsync";
         public const string ReducedEffects = "reduced-effects";
 
+        // El texto tiene que ser EXACTAMENTE el que ya tenían estas dos filas cuando eran Demo:
+        // el id es la clave de PlayerPrefs, así que cambiarlo perdería lo que el jugador guardó.
+        public const string MasterVolume = "master-volume";
+        public const string UiVolume = "ui-volume";
+
         /// <summary>
         /// Las alternativas del modo de pantalla. Viven acá porque el ORDEN es contrato:
         /// el valor guardado es el índice, y el aplicador lo traduce por posición.
@@ -35,7 +40,7 @@ namespace YeetTheMenu.Menus
     ///   Demo       se mueve y se guarda, pero no llega a ningún sistema
     ///   Hidden     no se dibuja; queda escrita como documentación del juego terminado
     ///
-    /// Hay 24 filas y solo cuatro aplicables. Eso no es una carencia del menú: es lo que el
+    /// Hay 24 filas y seis aplicables. Eso no es una carencia del menú: es lo que el
     /// proyecto puede cumplir hoy, dicho en voz alta en lugar de simulado.
     /// </summary>
     [CreateAssetMenu(menuName = "TapeLab/Settings Catalog", fileName = "SC_TapeLab")]
@@ -47,10 +52,10 @@ namespace YeetTheMenu.Menus
         protected override IReadOnlyList<SettingsTab> Build() => new[]
         {
             Tab("sound", "Sound",
-                Slider("master-volume", "Master volume", 0, 100, 80,
-                       "No effect yet — TapeLab has no audio. The slider still remembers where you left it.", Demo),
-                Slider("ui-volume", "UI volume", 0, 100, 70,
-                       "No effect yet — there are no interface sounds.", Demo)),
+                Slider(SettingIds.MasterVolume, "Master volume", 0, 100, 80,
+                       "Volume of every sound the game plays."),
+                Slider(SettingIds.UiVolume, "UI volume", 0, 100, 70,
+                       "Volume of the menu sounds, on top of the master volume.")),
 
             Tab("graphics", "Graphics",
                 Choice("quality-preset", "Quality preset", new[] { "Low", "Medium", "High", "Custom" }, 2,
@@ -101,7 +106,7 @@ namespace YeetTheMenu.Menus
                 Slider("camera-shake", "Camera shake", 0, 100, 100,
                        "No effect yet — there is no gameplay camera.", Demo),
                 Toggle("subtitles", "Subtitles", on: true,
-                       "No effect yet — there is no dialogue or audio.", Demo),
+                       "No effect yet — there is no dialogue.", Demo),
                 Slider("hud-scale", "HUD scale", 50, 150, 100,
                        "No effect yet — there is no HUD.", Demo),
                 Slider("font-scale", "Font scale", 80, 150, 100,
