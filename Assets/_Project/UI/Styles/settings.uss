@@ -1,16 +1,68 @@
 /* settings.uss: pantalla Settings.
-   Las filas se construyen desde datos; su aspecto vive acá.
-   Los tamaños son ~1,5× los del diseño original: 16 px de texto allá ≈ 24 px acá. */
+   Las pestañas y las filas se construyen desde datos; su aspecto vive acá.
+   Los tamaños son ~1,5× los del diseño original: 16 px de texto allá ≈ 24 px acá.
 
-/* Contenedor de pestañas. Todavía vacío: el selector no está hecho. */
+   Convención del proyecto, igual que en menu.uss y join.uss: con puntero manda :hover; bajo
+   .input-directional el hover se anula y manda el foco. Así nunca hay dos cosas resaltadas. */
+
+/* ── Pestañas ────────────────────────────────────────────────────────────── */
+
 .settings-tabs {
     flex-direction: row;
+    flex-wrap: wrap;
     justify-content: center;
     margin-top: 16px;
 }
 
-/* La lista: 960 px de ancho y 46 % de la pantalla como alto máximo.
-   Sin verificar: si dentro de una pantalla centrada colapsa a 0, cambiar max-height por height. */
+/* El borde inferior transparente está siempre: así la pestaña activa no corre el texto
+   al aparecer su línea. Es el mismo truco del diseño original. */
+.settings-tab {
+    margin: 0 12px;
+    padding: 4px 2px;
+    background-color: rgba(0, 0, 0, 0);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-radius: 0;
+    font-size: 30px;
+    letter-spacing: 3px;
+    color: var(--color-fg);
+    opacity: 0.7;
+    transition-property: color, opacity;
+    transition-duration: var(--time-hover);
+}
+
+.settings-tab--on {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+    opacity: 1;
+}
+
+.settings-tab:hover {
+    color: var(--color-hover);
+    opacity: 1;
+}
+
+.input-directional .settings-tab:hover {
+    color: var(--color-fg);
+    opacity: 0.7;
+}
+
+.input-directional .settings-tab--on:hover {
+    color: var(--color-accent);
+    opacity: 1;
+}
+
+.input-directional .settings-tab:focus {
+    color: var(--color-hover);
+    opacity: 1;
+}
+
+/* ── La lista ────────────────────────────────────────────────────────────── */
+
+/* 960 px de ancho y 46 % de la pantalla como alto máximo.
+   Sin verificar: si dentro de una pantalla centrada colapsa a 0 o se estira entera,
+   cambiar max-height por una altura fija. */
 .settings-rows {
     width: 960px;
     max-width: 88%;
@@ -18,14 +70,33 @@
     margin-top: 24px;
 }
 
-/* Una fila: etiqueta a la izquierda, control a la derecha, línea tenue abajo. */
+/* Deja aire para la barra de desplazamiento, para que no se monte sobre los controles. */
+.settings-rows .unity-scroll-view__content-container {
+    padding-right: 12px;
+}
+
+/* ── Una fila ────────────────────────────────────────────────────────────── */
+
+/* El borde izquierdo transparente reserva su lugar: cuando la fila recibe el foco y se pinta,
+   el contenido no se corre 3 px. */
 .settings-row {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding: 16px 0;
     border-bottom-width: 1px;
-    border-bottom-color: rgba(232, 217, 220, 0.13);   /* #e8d9dc22 */
+    border-bottom-color: rgba(232, 217, 220, 0.13);
+    border-left-width: 3px;
+    border-left-color: rgba(0, 0, 0, 0);
+    transition-property: background-color, border-left-color;
+    transition-duration: 0.15s;
+}
+
+.settings-row__main {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 1;
+    padding-left: 13px;   /* 16 − 3 del borde izquierdo: el texto queda donde el diseño lo pone */
 }
 
 .settings-row__label {
@@ -42,20 +113,55 @@
     margin-left: 48px;
 }
 
-/* Línea reservada para describir la opción enfocada. Vacía todavía, pero ya ocupa su lugar:
-   así el layout no salta cuando aparece el texto. */
+/* Con puntero: la fila apuntada se insinúa. */
+.settings-row:hover {
+    background-color: rgba(232, 217, 220, 0.04);
+}
+
+/* Con teclado o mando manda el foco, y el blanco es la FILA entera, no el control:
+   es grande, legible, y esquiva la pregunta de en qué hijo interno cae :focus. */
+.input-directional .settings-row:hover {
+    background-color: rgba(0, 0, 0, 0);
+}
+
+/* Dos clases de fila a propósito (.settings-row.settings-row--focus): tiene que pesar lo mismo
+   que la regla que anula el hover, y va después, así una fila enfocada que además está bajo el
+   puntero se sigue viendo enfocada. */
+.input-directional .settings-row.settings-row--focus {
+    background-color: rgba(199, 10, 63, 0.14);
+    border-left-color: var(--color-accent);
+}
+
+/* Insignia de las filas que se mueven pero no aplican nada. Chica y en el color de aviso:
+   son 19 de 23 filas, así que gritar sería ruido. La explicación la da la línea de abajo. */
+.settings-row__demo {
+    margin-left: 16px;
+    padding: 1px 8px;
+    font-size: 15px;
+    letter-spacing: 2px;
+    color: var(--color-warn);
+    border-width: 1px;
+    border-color: var(--color-warn);
+    opacity: 0.6;
+}
+
+/* ── Línea de descripción ────────────────────────────────────────────────── */
+
+/* Altura FIJA, no mínima: el texto aparece y desaparece al mover el foco o el puntero, y con
+   alto variable movería la lista de arriba en cada fila. Caben dos renglones. */
 .settings-desc {
-    min-height: 30px;
-    max-width: 900px;
-    margin-top: 16px;
-    font-size: 20px;
+    height: 76px;        
+    max-width: 1000px;   
+    font-size: 26px; 
     color: var(--color-fg);
     opacity: 0.7;
     -unity-text-align: middle-center;
     white-space: normal;
 }
 
-/* ── Slider ── Restilado modesto a propósito: los nombres de las partes internas son de Unity,
+/* ── Slider ──────────────────────────────────────────────────────────────── */
+
+/* Restilado modesto a propósito: los nombres de las partes internas son de Unity,
    conviene confirmarlos con el UI Toolkit Debugger antes de depender de ellos. */
 
 .settings-slider {
@@ -73,6 +179,11 @@
     border-width: 0;
 }
 
+/* El foco de un control se ve siempre, también con puntero: es donde se interactúa. */
+.settings-slider:focus .unity-base-slider__dragger {
+    background-color: var(--color-hover);
+}
+
 /* El número, de solo lectura. Ancho fijo para que el slider no se mueva cuando el valor
    pasa de 9 a 10 o de 99 a 100. */
 .settings-slider__value {
@@ -81,4 +192,155 @@
     font-size: 22px;
     color: var(--color-fg);
     -unity-text-align: middle-right;
+}
+
+/* ── Casilla ─────────────────────────────────────────────────────────────── */
+
+/* Un cuadrado vacío que se llena de magenta, como en el diseño original. El tema por defecto
+   le pone una tilde de fondo y esquinas redondeadas: las dos se quitan.
+   El brillo del diseño original no se reproduce: USS no tiene box-shadow. */
+.settings-toggle {
+    margin: 0;
+}
+
+.settings-toggle .unity-toggle__input {
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-width: 26px;
+    min-height: 26px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* El control se crea sin texto, pero el campo reserva su etiqueta igual. */
+.settings-toggle .unity-base-field__label,
+.settings-toggle .unity-toggle__label {
+    display: none;
+}
+
+.settings-toggle .unity-toggle__checkmark {
+    flex-shrink: 0;
+    min-width: 26px;
+    min-height: 26px;
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0);
+    background-image: none;
+    border-width: 1px;
+    border-color: var(--color-fg);
+    border-radius: 0;
+    transition-property: background-color, border-color;
+    transition-duration: var(--time-hover);
+}
+
+.settings-toggle:checked .unity-toggle__checkmark {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.settings-toggle:focus .unity-toggle__checkmark {
+    border-color: var(--color-hover);
+}
+
+/* ── Choice: desplegable ────────────────────────────────────────────────────────────── */
+
+.settings-dropdown {
+    width: 300px;
+    min-height: 46px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.settings-dropdown .unity-base-popup-field__input,
+.settings-dropdown .unity-popup-field__input {
+    flex-direction: row;
+    align-items: center;
+    min-height: 46px;
+    padding-left: 14px;
+    padding-right: 12px;
+    margin: 0;
+    background-color: rgb(10, 10, 16);
+    border-width: 0;
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(115, 75, 92);
+    border-radius: 0;
+}
+
+.settings-dropdown .unity-base-popup-field__text {
+    color: rgb(241, 230, 234);
+    font-size: 28px;
+    flex-grow: 1;
+    margin-right: 10px;
+    -unity-text-align: middle-left;
+}
+
+.settings-dropdown .unity-base-popup-field__arrow {
+    width: 14px;
+    height: 14px;
+    -unity-background-image-tint-color: rgb(241, 230, 234);
+}
+
+.settings-dropdown:hover .unity-base-popup-field__input,
+.settings-dropdown:hover .unity-popup-field__input,
+.settings-dropdown:focus .unity-base-popup-field__input,
+.settings-dropdown:focus .unity-popup-field__input {
+    border-bottom-color: rgb(255, 61, 120);
+}
+
+/* ── Popup ─────────────────────────────────────────────────────── */
+
+.settings-choice {
+    width: 210px;
+    height: 36px;
+    min-height: 36px;
+    flex-shrink: 0;
+    position: relative;
+    margin: 0;
+    padding: 0 28px 0 10px;
+    background-color: rgb(10, 10, 16);
+    border-width: 0;
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(232, 217, 220, 0.55);
+    border-radius: 0;
+    color: rgb(241, 230, 234);
+    font-size: 22px;
+    -unity-text-align: middle-left;
+    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/Special_Elite/SpecialElite-Regular.ttf?fileID=12800000&guid=5b14ebc0979500d4192ce58b0b38a960&type=3#SpecialElite-Regular");
+    transition-property: border-bottom-color, background-color;
+    transition-duration: 0.15s;
+}
+
+.settings-choice:hover,
+.settings-choice:focus {
+    border-bottom-color: rgb(255, 61, 120);
+    background-color: rgb(25, 11, 21);
+}
+
+/* Mantener el resaltado de foco al navegar con teclado o mando. */
+.input-directional .settings-choice:hover {
+    border-bottom-color: rgba(232, 217, 220, 0.55);
+    background-color: rgb(10, 10, 16);
+}
+.input-directional .settings-choice:focus {
+    border-bottom-color: rgb(255, 61, 120);
+    background-color: rgb(25, 11, 21);
+}
+
+.choice-menu-field__arrow {
+    position: absolute;
+    right: 9px;
+    top: 7px;
+    width: 16px;
+    height: 22px;
+    font-size: 18px;
+    -unity-text-align: middle-center;
+    color: rgb(232, 217, 220);
+}
+
+/* ── Restablecer ─────────────────────────────────────────────────────────── */
+
+/* Usa el aspecto de Back (clase back-btn) en la esquina opuesta. El selector por nombre
+   pesa más que la clase, así que no depende del orden de las hojas. */
+#btn-reset {
+    left: auto;
+    right: 60px;
 }

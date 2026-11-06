@@ -1,0 +1,70 @@
+/* Estilos EXCLUSIVOS del GenericDropdownMenu creado por ChoiceMenuField.
+   Se agregan a la instancia del popup por C#. NO importar en PanelSettings,
+   Theme Style Sheet, theme.uss, menu.uss ni SettingsScreen.uxml. */
+
+/* La raíz .ytm-choice-popup ocupa toda la superficie para cerrar al clicar
+   afuera. NO pintar allí el fondo: taparía todo el menú. */
+.ytm-choice-popup .unity-base-dropdown__container-outer {
+    background-color: rgb(10, 10, 16);
+    border-width: 1px;
+    border-color: rgb(100, 59, 78);
+    border-radius: 0;
+    padding: 0;
+}
+
+.ytm-choice-popup .unity-base-dropdown__container-inner,
+.ytm-choice-popup .unity-scroll-view__viewport,
+.ytm-choice-popup .unity-scroll-view__content-container {
+    background-color: rgb(10, 10, 16);
+    padding: 0;
+}
+
+.ytm-choice-popup .unity-base-dropdown__item {
+    min-height: 40px;
+    padding: 4px 8px 4px 5px;
+    border-width: 0;
+    border-left-width: 3px;
+    border-left-color: rgba(0, 0, 0, 0);
+    background-color: rgb(10, 10, 16);
+}
+
+.ytm-choice-popup .unity-base-dropdown__item-content {
+    flex-direction: row;
+    align-items: center;
+}
+
+.ytm-choice-popup .unity-base-dropdown__label {
+    font-size: 22px;
+    color: rgb(241, 230, 234);
+    -unity-text-align: middle-left;
+    -unity-font-definition: url("project://database/Assets/_Project/Art/Fonts/Special_Elite/SpecialElite-Regular.ttf?fileID=12800000&guid=5b14ebc0979500d4192ce58b0b38a960&type=3#SpecialElite-Regular");
+}
+
+/* Tilde pequeña y estable: no altera el texto de las alternativas. */
+.ytm-choice-popup .unity-base-dropdown__checkmark {
+    width: 12px;
+    min-width: 12px;
+    height: 12px;
+    min-height: 12px;
+    margin-left: 2px;
+    margin-right: 7px;
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(255, 115, 156);
+}
+
+.ytm-choice-popup .unity-base-dropdown__item:checked {
+    background-color: rgb(39, 14, 28);
+    border-left-color: rgb(199, 10, 63);
+}
+
+.ytm-choice-popup .unity-base-dropdown__item:hover,
+.ytm-choice-popup .unity-base-dropdown__item:hover:enabled,
+.ytm-choice-popup .unity-base-dropdown__item:focus {
+    background-color: rgb(69, 17, 39);
+    border-left-color: rgb(255, 61, 120);
+}
+
+.ytm-choice-popup .unity-base-dropdown__item:hover .unity-base-dropdown__label,
+.ytm-choice-popup .unity-base-dropdown__item:hover:enabled .unity-base-dropdown__label {
+    color: rgb(255, 247, 250);
+}

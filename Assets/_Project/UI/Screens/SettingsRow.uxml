@@ -1,6 +1,9 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:VisualElement name="row" class="settings-row font-body">
-        <ui:Label name="row-label" text="Option" class="settings-row__label"/>
+        <ui:VisualElement name="row-main" class="settings-row__main">
+            <ui:Label name="row-label" text="Option" class="settings-row__label"/>
+            <ui:Label name="row-demo" text="DEMO" class="settings-row__demo"/>
+        </ui:VisualElement>
         <ui:VisualElement name="row-control" class="settings-row__control"/>
     </ui:VisualElement>
 </ui:UXML>

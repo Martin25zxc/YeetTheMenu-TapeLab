@@ -4,16 +4,54 @@
     <Style src="project://database/Assets/_Project/UI/Styles/settings.uss?fileID=7433441132597879392&amp;guid=b031c9cb20c06be4c9a42c6dfd36cdd3&amp;type=3#settings"/>
     <ui:VisualElement name="screen-settings" class="screen">
         <ui:Label text="SETTINGS" class="panel-title"/>
-        <ui:VisualElement name="settings-tabs" class="settings-tabs"/>
+
+        <!-- Las pestañas y las filas las genera el código desde el catálogo. Lo que hay acá
+             dentro son MUESTRAS: existen para poder diseñar en UI Builder y el código las borra
+             al construir. Si cambia la estructura de SettingsRow.uxml o de CyclerField, estas
+             muestras se actualizan a mano. -->
+        <ui:VisualElement name="settings-tabs" class="settings-tabs">
+            <ui:Button text="GRAPHICS" class="settings-tab settings-tab--on"/>
+            <ui:Button text="ACCESSIBILITY" class="settings-tab"/>
+        </ui:VisualElement>
+
         <ui:ScrollView name="settings-rows" mode="Vertical" horizontal-scroller-visibility="Hidden" class="settings-rows">
-            <ui:VisualElement name="preview-row" class="settings-row font-body">
-                <ui:Label text="Retro filter" class="settings-row__label"/>
+            <ui:VisualElement name="preview-slider" class="settings-row font-body">
+                <ui:VisualElement class="settings-row__main">
+                    <ui:Label text="Retro filter" class="settings-row__label"/>
+                </ui:VisualElement>
                 <ui:VisualElement class="settings-row__control">
-                    <ui:SliderInt low-value="0" high-value="100" value="70" show-input-field="true" class="settings-slider"/>
+                    <ui:SliderInt low-value="0" high-value="100" value="70" class="settings-slider"/>
+                    <ui:Label text="70" class="settings-slider__value"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="preview-toggle" class="settings-row font-body">
+                <ui:VisualElement class="settings-row__main">
+                    <ui:Label text="VSync" class="settings-row__label"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row__control">
+                    <ui:Toggle value="true" class="settings-toggle"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <!--  Solo es una muestra para UI Builder; SettingsScreen lo borra al construir. -->
+            <ui:VisualElement name="preview-choice" class="settings-row settings-row--demo font-body">
+                <ui:VisualElement class="settings-row__main">
+                    <ui:Label text="Shadows" class="settings-row__label"/>
+                    <ui:Label text="DEMO" class="settings-row__demo"/>
+                </ui:VisualElement>
+                <ui:VisualElement class="settings-row__control">
+                    <ui:Button text="High" class="settings-choice">
+                        <ui:Label text="▾" class="choice-menu-field__arrow"/>
+                    </ui:Button>
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:ScrollView>
-        <ui:Label name="settings-desc" class="settings-desc font-body"/>
+
+        <!-- Línea reservada: explica la opción enfocada o apuntada. Alto fijo, para que el
+             texto que aparece no mueva nada de lo que está arriba. -->
+        <ui:Label name="settings-desc" text="Scanlines, tape roll, grain and glitch intensity." class="settings-desc font-body"/>
+
         <ui:Button name="btn-back" text="‹ Back (Esc)" class="back-btn font-body"/>
+        <ui:Button name="btn-reset" text="RESET GRAPHICS" class="back-btn font-body"/>
     </ui:VisualElement>
 </ui:UXML>
